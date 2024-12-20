@@ -1,6 +1,6 @@
 import { checkSchema } from "express-validator";
 
-export const userValidationSchema = checkSchema({
+export const createUserSchema = checkSchema({
     username: {
         in: ['body'],
         trim: true,
@@ -44,3 +44,22 @@ export const userValidationSchema = checkSchema({
         optional: true
     }
 });
+
+export const validateUserSchema = checkSchema({
+    email: {
+        in: ['body'],
+        isEmail: {
+            errorMessage: 'email must be a valid email address'
+        },
+        normalizeEmail: true,
+        escape: true
+    }, 
+    password: {
+        in: ['body'],
+        trim: true,
+        isString: {
+            errorMessage: 'password must be a string of mixed characters'
+        },
+        escape: true
+    }
+})
