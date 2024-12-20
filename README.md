@@ -1,5 +1,7 @@
 # ShopSmart
 
+![shopsmart](image.webp)
+
 ## Description
 
 A robust RESTful API for e-commerce operations built with Node.js and MongoDB. Features comprehensive endpoints for product management, secure user authentication, shopping cart operations, and payment integration (Stripe & MPesa). Designed to support scalable e-commerce applications with detailed documentation for frontend integration.
