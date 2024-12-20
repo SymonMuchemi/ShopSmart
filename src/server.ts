@@ -13,7 +13,7 @@ app.use(morgan('dev'));
 app.use(express.json());
 app.use(cookieParser(process.env.JWT_SECRET));
 
-connectDB();
+// connectDB();
 
 // simple route
 app.get('/hello-world', (req: Request, res: Response) => {
