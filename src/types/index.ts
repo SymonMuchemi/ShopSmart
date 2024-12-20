@@ -7,3 +7,4 @@ export interface IUser extends Document {
     role: string | 'user' | 'admin';
 }
 
+export type AuthUser = Pick<IUser, 'email' | 'password'>

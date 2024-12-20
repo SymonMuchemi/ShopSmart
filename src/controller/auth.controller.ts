@@ -1,22 +1,13 @@
 import { Request, Response } from "express";
 import { validationResult } from "express-validator";
-import { createUser } from "../services/auth.service";
+import { handleRequest } from "../utils";
+import { createUser, authenticateUser } from "../services/auth.service";
 
 export const register = async (req: Request, res: Response) => {
-    try {
-        const errors = validationResult(req);
+    await handleRequest(req, res, createUser, "auth.controller: Error registering user");
+};
 
-        if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
-        }
+export const login = async (req: Request, res: Response) => {
+    await handleRequest(req, res, authenticateUser, "auth.controller: Error logging in user");
+};
 
-        const { code, message, details } = await createUser(req.body);
-
-        return res.status(code).json({ message, details });
-    } catch (error: any) {
-        return res.status(500).json({
-            message: "auth.controller: Error registering user",
-            details: error.toString()
-        })
-    }
-}
