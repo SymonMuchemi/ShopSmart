@@ -1,4 +1,5 @@
 import { checkSchema } from "express-validator";
+import { IMAGE_VIDEO_URL_REGEX } from "../../utils";
 
 export const createProductSchema = checkSchema({
     name: {
@@ -12,7 +13,7 @@ export const createProductSchema = checkSchema({
                 min: 7,
                 max: 50
             },
-            errorMessage: 'name must be a string of 7 - 24 characters'
+            errorMessage: 'name must be a string of 7 - 50 characters'
         },
         escape: true
     },
@@ -52,5 +53,33 @@ export const createProductSchema = checkSchema({
             errorMessage: 'price must be a number!'
         },
         escape: true
+    },
+    imageUrls: {
+        in: ['body'],
+        isArray: {
+            errorMessage: 'imageUrls must be an array'
+        },
+        custom: {
+            options: (imageUrls: string[]) => {
+                const isValid = imageUrls.every((url) =>
+                    IMAGE_VIDEO_URL_REGEX.test(url)
+                );
+                if (!isValid) {
+                    throw new Error('Each image URL must be a valid URL');
+                }
+                return true;
+            },
+        }
+    },
+    videoURl: {
+        in: ['body'],
+        optional: true,
+        isString: {
+            errorMessage: 'video URL must be a string'
+        },
+        matches: {
+            options: IMAGE_VIDEO_URL_REGEX,
+            errorMessage: 'video URL must be valid URL'
+        }
     }
 })

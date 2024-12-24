@@ -3,9 +3,8 @@ import { IProduct, ReturnResponse } from "../types";
 
 export const createProduct = async (product: IProduct): Promise<ReturnResponse> => {
     try {
-        const { name, description, price, quantity } = product;
 
-        const existingProduct = await Product.findOne({ name: name.toLowerCase() });
+        const existingProduct = await Product.findOne({ name: product.name.toLowerCase() });
 
         if (existingProduct) {
             return {
@@ -16,9 +15,10 @@ export const createProduct = async (product: IProduct): Promise<ReturnResponse> 
         }
 
         const newProduct = await Product.create({
-            name: name.toLowerCase(),
-            description, price,
-            quantity
+            ...product,
+            name: product.name.toLowerCase(),
+            category: product.category.toLowerCase(),
+            videoUrl: product.videoUrl
         });
 
         return {
