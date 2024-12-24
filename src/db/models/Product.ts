@@ -2,7 +2,6 @@ import mongoose, { Schema } from "mongoose";
 import { IProduct } from "../../types";
 import { IMAGE_VIDEO_URL_REGEX } from "../../utils";
 
-
 const ProductSchema: Schema = new Schema({
     name: {
         type: String,
