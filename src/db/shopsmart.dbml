@@ -1,0 +1,52 @@
+Enum Roles {
+    admin
+    user
+}
+
+Table User {
+    id integer
+    username varchar
+    password varchar
+    email varchar
+    role Roles [default: 'user']
+    date_created timestamp
+    date_updated timestamp
+}
+
+Table Product {
+    id integer [primary key]
+    name varchar
+    price float
+    quantity integer
+    description text
+    category varchar
+    discount float
+    video_url varchar
+    image_urls varchar
+    date_created timestamp
+    date_updated timestamp
+}
+
+Table Cart {
+    id integer [primary key]
+    user_id integer
+    product_id integer
+    quantity integer
+    date_created timestamp
+    date_updated timestamp
+}
+
+Table Purchase {
+    id integer [primary key]
+    user_id integer
+    product_id integer
+    quantity integer
+    amount float
+    date_created timestamp
+    date_updated timestamp
+}
+
+Ref: Cart.user_id > User.id // many-to-one
+Ref: Cart.product_id > Product.id // many-to-one
+Ref: Purchase.user_id > User.id // many-to-one
+Ref: Purchase.product_id > Product.id // many-to-one
