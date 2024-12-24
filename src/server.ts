@@ -7,6 +7,7 @@ import { connectDB } from './db/conn';
 // TODO: Find shorter method to import and use all routes
 // import routes from './routes';
 import authRouter from './routes/auth.routes';
+import productsRouter from './routes/product.routes';
 
 config();
 
@@ -20,6 +21,7 @@ app.use(express.json());
 app.use(cookieParser(process.env.JWT_SECRET));
 
 app.use('/auth', authRouter);
+app.use('/products', productsRouter);
 
 // simple route
 app.get('/hello-world', (req: Request, res: Response) => {

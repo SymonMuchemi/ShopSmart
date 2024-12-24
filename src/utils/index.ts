@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { validationResult } from "express-validator";
+import { ReturnResponse } from "../types";
 
 export const asyncHandler =
     (fn: (req: Request, res: Response, next: NextFunction) => Promise<any>) =>
@@ -10,7 +11,7 @@ export const asyncHandler =
 export const handleRequest = async (
     req: Request,
     res: Response,
-    serviceFunction: (data: any) => Promise<{ code: number; message: string; details: any; }>,
+    serviceFunction: (data: any) => Promise<ReturnResponse>,
     errorMessage: string
 ) => {
     try {
