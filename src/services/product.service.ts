@@ -115,6 +115,31 @@ export const fetchProductByCategory = async (category: string): Promise<ReturnRe
     }
 }
 
+export const fetchProductById = async (id: string): Promise<ReturnResponse> => {
+    try {
+        const product = await Product.findOne({ _id: id });
+
+        if (!product) {
+            return {
+                code: 400,
+                message: 'Error fetching product',
+                details: `Cannot find product with id: ${id}`
+            }
+        }
+
+        return {
+            code: 200,
+            message: 'Product found!',
+            details: product
+        }
+    } catch (error: any) {
+        return {
+            code: 500,
+            message: 'Internal server error',
+            details: error.toString()
+        }
+    }
+}
 export const updateProductByName = async (name: string, updateData: UpdateProduct): Promise<ReturnResponse> => {
     try {
         const updatedProduct = await Product.findOneAndUpdate(
