@@ -24,3 +24,4 @@ export interface ReturnResponse {
 }
 
 export type AuthUser = Pick<IUser, 'email' | 'password'>
+export type UpdateProduct = Partial<IProduct>;

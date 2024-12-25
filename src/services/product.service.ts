@@ -1,5 +1,5 @@
 import Product from "../db/models/Product";
-import { IProduct, ReturnResponse } from "../types";
+import { IProduct, ReturnResponse, UpdateProduct } from "../types";
 
 export const createProduct = async (product: IProduct): Promise<ReturnResponse> => {
     try {
@@ -88,6 +88,7 @@ export const fetchProductByName = async (name: string): Promise<ReturnResponse> 
         }
     }
 }
+
 export const fetchProductByCategory = async (category: string): Promise<ReturnResponse> => {
     try {
         const product = await Product.find({ category: category.toLowerCase() });
@@ -105,6 +106,78 @@ export const fetchProductByCategory = async (category: string): Promise<ReturnRe
             message: 'Product found!',
             details: product
         }
+    } catch (error: any) {
+        return {
+            code: 500,
+            message: 'Internal server error',
+            details: error.toString()
+        }
+    }
+}
+
+export const updateProductByName = async (name: string, updateData: UpdateProduct): Promise<ReturnResponse> => {
+    try {
+        const updatedProduct = await Product.findOneAndUpdate(
+            { name: name.toLowerCase() },
+            {
+                $set: {
+                    ...updateData,
+                    name: name.toLowerCase()
+                }
+            },
+            { new: true, runValidators: true }
+        )
+
+        if (!updatedProduct) {
+            return {
+                code: 400,
+                message: 'Error updating product',
+                details: `Could not find product with name ${name}`
+            }
+        }
+
+        return {
+            code: 200,
+            message: 'Product updated successfully',
+            details: updatedProduct
+        }
+
+    } catch (error: any) {
+        return {
+            code: 500,
+            message: 'Internal server error',
+            details: error.toString()
+        }
+    }
+}
+
+export const updateProductById = async (id: string, updateData: UpdateProduct): Promise<ReturnResponse> => {
+    try {
+        const updatedProduct = await Product.findOneAndUpdate(
+            { _id: id },
+            {
+                $set: {
+                    ...updateData,
+                    name: updateData.name?.toLowerCase()
+                }
+            },
+            { new: true, runValidators: true }
+        )
+
+        if (!updatedProduct) {
+            return {
+                code: 400,
+                message: 'Error updating product',
+                details: `Could not find product with id ${id}`
+            }
+        }
+
+        return {
+            code: 200,
+            message: 'Product updated successfully',
+            details: updatedProduct
+        }
+
     } catch (error: any) {
         return {
             code: 500,
