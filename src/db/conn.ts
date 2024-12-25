@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 export const connectDB = async () => {
     try {
-        const DBUrl: string | undefined = process.env.MONGO_DB_URL;
+        const DBUrl: string | undefined = process.env.MONGO_URL;
 
         if (DBUrl === undefined) {
             console.log('Invalid db URl');
