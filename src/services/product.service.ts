@@ -57,7 +57,7 @@ export const fechAllProducts = async (): Promise<ReturnResponse> => {
     } catch (error: any) {
         return {
             code: 500,
-            message: 'Internal server error',
+            message: 'product.service: error fetching products',
             details: error.toString()
         }
     }
@@ -83,7 +83,7 @@ export const fetchProductByName = async (name: string): Promise<ReturnResponse> 
     } catch (error: any) {
         return {
             code: 500,
-            message: 'Internal server error',
+            message: 'product.service: error fetching products',
             details: error.toString()
         }
     }
@@ -145,7 +145,7 @@ export const updateProductByName = async (name: string, updateData: UpdateProduc
     } catch (error: any) {
         return {
             code: 500,
-            message: 'Internal server error',
+            message: 'product.service: error updating product',
             details: error.toString()
         }
     }
@@ -181,8 +181,34 @@ export const updateProductById = async (id: string, updateData: UpdateProduct): 
     } catch (error: any) {
         return {
             code: 500,
-            message: 'Internal server error',
+            message: 'product.service: error updating product',
             details: error.toString()
         }
     }
 }
+
+export const deleteProduct = async (id: string): Promise<ReturnResponse> => {
+    try {
+        const deletedProduct = await Product.findOneAndDelete({ _id: id });
+
+        if (!deletedProduct) {
+            return {
+                code: 400,
+                message: 'Error deleting product',
+                details: `Could not find product with id ${id}`
+            }
+        }
+
+        return {
+            code: 200,
+            message: 'Product deleted successfully',
+            details: deletedProduct
+        }
+    } catch (error: any) {
+        return {
+            code: 500,
+            message: 'product.service: error deleting product',
+            details: error.toString()
+        }
+    }
+} 

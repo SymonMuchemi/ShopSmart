@@ -5,12 +5,14 @@ import {
     fechAllProducts,
     fetchProductByName,
     fetchProductByCategory,
-    updateProductByName
+    updateProductByName,
+    deleteProduct
 } from "../services/product.service";
 
 const PRODUCT_CREATION_ERROR_MSG = "product.controller: Error creating product";
 const PRODUCT_FETCH_ERROR_MSG = "product.controller: Error fetching products";
-const PRODUCT_UPDATE_ERROR_MSG = "product.controller: Error updating products";
+const PRODUCT_UPDATE_ERROR_MSG = "product.controller: Error updating product";
+const PRODUCT_DELETION_ERROR_MSG = "product.controller: Error deleting product";
 
 export const create = async (req: Request, res: Response) => {
     await handleRequest(req, res, createProduct, PRODUCT_CREATION_ERROR_MSG);
@@ -45,4 +47,10 @@ export const updateByName = async (req: Request, res: Response) => {
     } else if (id) {
         await handleRequest(req, res, () => updateProductByName(id, updateData), PRODUCT_UPDATE_ERROR_MSG)
     }
+}
+
+export const deleteById = async (req: Request, res: Response) => {
+    const id = req.params.id as string;
+
+    await handleRequest(req, res, () => deleteProduct(id), PRODUCT_DELETION_ERROR_MSG)
 }
