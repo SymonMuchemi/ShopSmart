@@ -62,4 +62,4 @@ export const validateUserSchema = checkSchema({
         },
         escape: true
     }
-})
+});

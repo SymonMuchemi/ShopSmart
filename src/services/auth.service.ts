@@ -75,7 +75,7 @@ export const authenticateUser = async (user: AuthUser) => {
             }
         }
 
-        const token = jwt.sign({ userId: existingUser._id }, jwtSecret, { expiresIn: jwtExpiration });
+        const token = jwt.sign({ userId: existingUser._id?.toString() }, jwtSecret, { expiresIn: jwtExpiration });
 
         return {
             code: 200,
