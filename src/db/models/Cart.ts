@@ -1,5 +1,5 @@
-import mongoose, {Schema} from 'mongoose';
-import {ICart} from "../../types";
+import mongoose, { Schema } from 'mongoose';
+import { ICart } from "../../types";
 
 const CartSchema: Schema = new Schema({
     user: {
@@ -20,4 +20,4 @@ const CartSchema: Schema = new Schema({
     timestamps: true
 });
 
-export default  mongoose.model<ICart>('Cart', CartSchema);
+export default mongoose.model<ICart>('Cart', CartSchema);

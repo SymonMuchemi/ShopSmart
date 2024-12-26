@@ -1,5 +1,5 @@
-import mongoose, {Schema} from "mongoose";
-import {ICartItem} from "../../types";
+import mongoose, { Schema } from "mongoose";
+import { ICartItem } from "../../types";
 
 const cartITemSchema: Schema = new Schema({
     product: {
@@ -20,6 +20,6 @@ const cartITemSchema: Schema = new Schema({
     total_amount: {
         type: Number
     }
-}, {timestamps: true});
+}, { timestamps: true });
 
 export default mongoose.model<ICartItem>('CartITem', cartITemSchema);
