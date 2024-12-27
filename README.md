@@ -55,9 +55,9 @@ A robust RESTful API for e-commerce operations built with Node.js and MongoDB. F
 
     ```env
     PORT=3000
-    MONGO_URI=mongodb://localhost:27017/shopsmart
+    MONGO_URL=mongodb://localhost:27017/shopsmart
     JWT_SECRET=your_secret_key
-    JWT_EXPIRES_IN=1d
+    JWT_EXPIRATION=1d
     STRIPE_SECRET_KEY=your_stripe_secret_key
     MPESA_CONSUMER_KEY=your_mpesa_consumer_key
     MPESA_CONSUMER_SECRET=your_mpesa_consumer_secret
