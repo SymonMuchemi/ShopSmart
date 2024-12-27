@@ -2,7 +2,7 @@
 
 <!-- markdownlint-disable MD033 -->
 <div align="center">
-    <img src="smart_shop_logo-no-bg-cropped.png" alt="Shop-smart API Logo">
+    <img src="Smart_Online_Shop_Chart_Logo-shift-no-bg-cropped.png" alt="Shop-smart API Logo">
 </div>
 
 ## Description
