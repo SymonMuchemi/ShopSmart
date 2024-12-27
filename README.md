@@ -1,6 +1,9 @@
 # ShopSmart
 
-![Shop-smart API Logo](smart_shop_logo-no-bg-cropped.png)
+<!-- markdownlint-disable MD033 -->
+<div align="center">
+    <img src="smart_shop_logo-no-bg-cropped.png" alt="Shop-smart API Logo">
+</div>
 
 ## Description
 
