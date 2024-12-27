@@ -1,18 +1,19 @@
 # ShopSmart
 
+## Description
+
+A robust RESTful API for e-commerce operations built with Node.js and MongoDB.
+
 <!-- markdownlint-disable MD033 -->
 <div align="center">
     <img src="Smart_Online_Shop_Chart_Logo-shift-no-bg-cropped.png" alt="Shop-smart API Logo">
 </div>
 
-## Description
-
-A robust RESTful API for e-commerce operations built with Node.js and MongoDB. Features comprehensive endpoints for product management, secure user authentication, shopping cart operations, and payment integration (Stripe & MPesa). Designed to support scalable e-commerce applications with detailed documentation for frontend integration.
 
 ## Features
 
-- [ ] User Authentication
-- [ ] Product Management
+- [x] User Authentication
+- [x] Product Management
 - [ ] image storage
 - [ ] Shopping Cart Operations
 - [ ] Credit Card Payment Integration
