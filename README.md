@@ -1,6 +1,6 @@
 # ShopSmart
 
-![shopsmart](./smart_shop_logo-no-bg.png)
+![Shop-smart API Logo](smart_shop_logo-no-bg-cropped.png)
 
 ## Description
 
