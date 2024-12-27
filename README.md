@@ -1,6 +1,6 @@
 # ShopSmart
 
-![shopsmart](image.webp)
+![shopsmart](./smart_shop_logo-no-bg.png)
 
 ## Description
 
