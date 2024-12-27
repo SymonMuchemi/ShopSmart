@@ -10,6 +10,7 @@ A robust RESTful API for e-commerce operations built with Node.js and MongoDB. F
 
 - [ ] User Authentication
 - [ ] Product Management
+- [ ] image storage
 - [ ] Shopping Cart Operations
 - [ ] Credit Card Payment Integration
 - [ ] MPesa Payment Integration
@@ -19,6 +20,9 @@ A robust RESTful API for e-commerce operations built with Node.js and MongoDB. F
 
 - [Node.JS](www.nodejs.org): JavaScript runtime.
 - [Express](https://expressjs.com/): Web framework for Node.js.
+- [Amazon S3](https://aws.amazon.com/s3/): Cloud storage.
+- [Multer](https://www.npmjs.com/package/multer): Middleware for handling multipart/form-data.
+- [AWS EC2](https://aws.amazon.com/ec2/): for deployment.
 - [MongoDB](https://www.mongodb.com/): NoSQL database.
 - [Mongoose](https://mongoosejs.com/): Object Relational Mapper for MongoDB.
 - [JWT](https://jwt.io/): Secure user authentication.
