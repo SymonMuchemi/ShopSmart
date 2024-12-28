@@ -9,7 +9,6 @@ A robust RESTful API for e-commerce operations built with Node.js and MongoDB.
     <img src="Smart_Online_Shop_Chart_Logo-shift-no-bg-cropped.png" alt="Shop-smart API Logo">
 </div>
 
-
 ## Features
 
 - [x] User Authentication
