@@ -26,16 +26,8 @@ const ProductSchema: Schema = new Schema({
     discount: {
         type: Number,
     },
-    imageUrls: {
+    imageNames: {
         type: [String],
-        validate: {
-            validator: (v: string[]) => {
-                v.every((url) => {
-                    IMAGE_VIDEO_URL_REGEX.test(url)
-                })
-            },
-            message: 'Each image url must be a valid URL!'
-        },
     },
     videoUrl: {
         type: String,

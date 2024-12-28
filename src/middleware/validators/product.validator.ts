@@ -54,23 +54,6 @@ export const createProductSchema = checkSchema({
         },
         escape: true
     },
-    imageUrls: {
-        in: ['body'],
-        isArray: {
-            errorMessage: 'imageUrls must be an array'
-        },
-        custom: {
-            options: (imageUrls: string[]) => {
-                const isValid = imageUrls.every((url) =>
-                    IMAGE_VIDEO_URL_REGEX.test(url)
-                );
-                if (!isValid) {
-                    throw new Error('Each image URL must be a valid URL');
-                }
-                return true;
-            },
-        }
-    },
     videoURl: {
         in: ['body'],
         optional: true,
