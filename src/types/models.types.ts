@@ -12,7 +12,7 @@ export interface IProduct extends Document {
     description: string;
     price: number;
     quantity: number;
-    imageUrls: [string];
+    imageNames: [string];
     discount?: number;
     videoUrl?: string;
     category: string;
