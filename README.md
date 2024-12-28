@@ -1,15 +1,19 @@
 # ShopSmart
 
-![shopsmart](image.webp)
-
 ## Description
 
-A robust RESTful API for e-commerce operations built with Node.js and MongoDB. Features comprehensive endpoints for product management, secure user authentication, shopping cart operations, and payment integration (Stripe & MPesa). Designed to support scalable e-commerce applications with detailed documentation for frontend integration.
+A robust RESTful API for e-commerce operations built with Node.js and MongoDB.
+
+<!-- markdownlint-disable MD033 -->
+<div align="center">
+    <img src="Smart_Online_Shop_Chart_Logo-shift-no-bg-cropped.png" alt="Shop-smart API Logo">
+</div>
 
 ## Features
 
-- [ ] User Authentication
-- [ ] Product Management
+- [x] User Authentication
+- [x] Product Management
+- [ ] image storage
 - [ ] Shopping Cart Operations
 - [ ] Credit Card Payment Integration
 - [ ] MPesa Payment Integration
@@ -19,6 +23,9 @@ A robust RESTful API for e-commerce operations built with Node.js and MongoDB. F
 
 - [Node.JS](www.nodejs.org): JavaScript runtime.
 - [Express](https://expressjs.com/): Web framework for Node.js.
+- [Amazon S3](https://aws.amazon.com/s3/): Cloud storage.
+- [Multer](https://www.npmjs.com/package/multer): Middleware for handling multipart/form-data.
+- [AWS EC2](https://aws.amazon.com/ec2/): for deployment.
 - [MongoDB](https://www.mongodb.com/): NoSQL database.
 - [Mongoose](https://mongoosejs.com/): Object Relational Mapper for MongoDB.
 - [JWT](https://jwt.io/): Secure user authentication.
@@ -51,9 +58,9 @@ A robust RESTful API for e-commerce operations built with Node.js and MongoDB. F
 
     ```env
     PORT=3000
-    MONGO_URI=mongodb://localhost:27017/shopsmart
+    MONGO_URL=mongodb://localhost:27017/shopsmart
     JWT_SECRET=your_secret_key
-    JWT_EXPIRES_IN=1d
+    JWT_EXPIRATION=1d
     STRIPE_SECRET_KEY=your_stripe_secret_key
     MPESA_CONSUMER_KEY=your_mpesa_consumer_key
     MPESA_CONSUMER_SECRET=your_mpesa_consumer_secret
