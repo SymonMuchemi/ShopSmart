@@ -1,9 +1,10 @@
-import Product from "../db/models/Product";
+import { Product } from "../db/models";
+import { uploadImageToS3 } from "../s3";
+import { genereteFileName, resizeImage } from '../utils';
 import { IProduct, ReturnResponse, UpdateProduct } from "../types";
 
-export const createProduct = async (product: IProduct): Promise<ReturnResponse> => {
+export const createProduct = async (product: IProduct, files: Express.Multer.File[]): Promise<ReturnResponse> => {
     try {
-
         const existingProduct = await Product.findOne({ name: product.name.toLowerCase() });
 
         if (existingProduct) {
@@ -14,8 +15,27 @@ export const createProduct = async (product: IProduct): Promise<ReturnResponse> 
             }
         }
 
+        console.log("Files in req:", files.length);
+
+        const names = [];
+        if (files.length > 0) {
+
+            for (const file of files) {
+                const fileName = genereteFileName();
+
+                const resizedImageBuffer: Buffer = await resizeImage(file);
+
+                const uploadedImages = await uploadImageToS3(resizedImageBuffer, fileName, file.mimetype);
+
+                
+                names.push(fileName);
+            }
+            console.log("Uploaded image:", names.length)
+        }
+
         const newProduct = await Product.create({
             ...product,
+            imageNames: names,
             name: product.name.toLowerCase(),
             category: product.category.toLowerCase(),
             videoUrl: product.videoUrl

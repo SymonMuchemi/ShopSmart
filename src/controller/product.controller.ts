@@ -16,13 +16,14 @@ const PRODUCT_UPDATE_ERROR_MSG = "product.controller: Error updating product";
 const PRODUCT_DELETION_ERROR_MSG = "product.controller: Error deleting product";
 
 export const create = async (req: Request, res: Response) => {
-    await handleRequest(req, res, createProduct, PRODUCT_CREATION_ERROR_MSG);
+    const product = req.body;
+    const files = req.files as Express.Multer.File[] || [];
+    await handleRequest(req, res, () => createProduct(product, files), PRODUCT_CREATION_ERROR_MSG);
 }
 export const findAll = async (req: Request, res: Response) => {
     let productName = req.query.name as string;
     let category = req.query.category as string;
     let id = req.query.id as string;
-
 
     if (productName) {
         productName = productName.toLowerCase();
