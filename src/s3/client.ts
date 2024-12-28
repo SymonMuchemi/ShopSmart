@@ -8,12 +8,6 @@ const region = process.env.S3_BUCKET_REGION;
 const accessKeyId = process.env.S3_ACCESS_KEY;
 const secretAccessKey = process.env.S3_SECRET_ACCESS_KEY;
 
-for (const name in [bucketName, region, accessKeyId, secretAccessKey]) {
-    if (name == undefined) {
-        throw new Error(`${name} credential missing`);
-    }
-}
-
 if (!bucketName) {
     throw new Error("Missing credentials: BUCKET_NAME");
 }
