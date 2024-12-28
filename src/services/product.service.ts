@@ -1,5 +1,5 @@
 import { Product } from "../db/models";
-import { uploadImageToS3 } from "../s3";
+import { getObjectSignedUrl, uploadImageToS3 } from "../s3";
 import { genereteFileName, resizeImage } from '../utils';
 import { IProduct, ReturnResponse, UpdateProduct } from "../types";
 
@@ -25,8 +25,7 @@ export const createProduct = async (product: IProduct, files: Express.Multer.Fil
 
                 const resizedImageBuffer: Buffer = await resizeImage(file);
 
-                const uploadedImages = await uploadImageToS3(resizedImageBuffer, fileName, file.mimetype);
-
+                await uploadImageToS3(resizedImageBuffer, fileName, file.mimetype);
                 
                 names.push(fileName);
             }
@@ -69,10 +68,25 @@ export const fechAllProducts = async (): Promise<ReturnResponse> => {
             }
         }
 
+        const productsWithImageURls = []
+
+        for (let product of products) {
+            const imageNames = product.imageNames;
+            const imageUrls = []
+
+            if (imageNames.length > 0) {
+                for (const name in imageNames) {
+                    imageUrls.push(await getObjectSignedUrl(name));
+                }
+            }
+
+            productsWithImageURls.push({...product, imageURls: imageUrls})
+        }
+
         return {
             code: 200,
             message: `${products.length} found!`,
-            details: products
+            details: productsWithImageURls
         }
     } catch (error: any) {
         return {

@@ -16,6 +16,7 @@ export interface IProduct extends Document {
     discount?: number;
     videoUrl?: string;
     category: string;
+    imageUrls?: string[];
 }
 
 export interface ICartItem extends Document {
