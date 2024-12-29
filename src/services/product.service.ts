@@ -1,6 +1,6 @@
 import { Product } from "../db/models";
 import { getObjectSignedUrl, uploadImageToS3 } from "../s3";
-import { genereteFileName, resizeImage } from '../utils';
+import { genereteFileName, resizeImage, getSignedUrlsArray } from '../utils';
 import { IProduct, ReturnResponse, UpdateProduct } from "../types";
 
 export const createProduct = async (product: IProduct, files: Express.Multer.File[]): Promise<ReturnResponse> => {
@@ -18,19 +18,24 @@ export const createProduct = async (product: IProduct, files: Express.Multer.Fil
         console.log("Files in req:", files.length);
 
         const names = [];
-        if (files.length > 0) {
 
-            for (const file of files) {
-                const fileName = genereteFileName();
-
-                const resizedImageBuffer: Buffer = await resizeImage(file);
-
-                await uploadImageToS3(resizedImageBuffer, fileName, file.mimetype);
-
-                names.push(fileName);
+        if (files.length == 0) {
+            return {
+                code: 400,
+                message: 'Error creating product',
+                details: 'No product image file attached!'
             }
-            console.log("Uploaded image:", names.length)
         }
+        for (const file of files) {
+            const fileName = genereteFileName();
+
+            const resizedImageBuffer: Buffer = await resizeImage(file);
+
+            await uploadImageToS3(resizedImageBuffer, fileName, file.mimetype);
+
+            names.push(fileName);
+        }
+        console.log("Uploaded image:", names.length)
 
         const newProduct = await Product.create({
             ...product,
@@ -72,13 +77,7 @@ export const fechAllProducts = async (): Promise<ReturnResponse> => {
 
         for (let product of products) {
             const imageNames = product.imageNames;
-            const imageUrls = []
-
-            if (imageNames.length > 0) {
-                for (const name of imageNames) {
-                    imageUrls.push(await getObjectSignedUrl(name));
-                }
-            }
+            const imageUrls = await getSignedUrlsArray(imageNames);
 
             productsWithImageURls.push({ product, imageURls: imageUrls })
         }
@@ -109,10 +108,13 @@ export const fetchProductByName = async (name: string): Promise<ReturnResponse> 
             }
         }
 
+        const imageNames = product.imageNames;
+        const imageUrls = await getSignedUrlsArray(imageNames);
+
         return {
             code: 200,
             message: 'Product found!',
-            details: product
+            details: { product, imageUrls: imageUrls }
         }
     } catch (error: any) {
         return {
@@ -125,20 +127,29 @@ export const fetchProductByName = async (name: string): Promise<ReturnResponse> 
 
 export const fetchProductByCategory = async (category: string): Promise<ReturnResponse> => {
     try {
-        const product = await Product.find({ category: category.toLowerCase() });
+        const products = await Product.find({ category: category.toLowerCase() });
 
-        if (!product) {
+        if (!products) {
             return {
                 code: 400,
                 message: 'Error fetching product',
-                details: `Cannot find product: ${name}`
+                details: `Cannot find products ${category}`
             }
+        }
+
+        const productsWithImageURls = []
+
+        for (let product of products) {
+            const imageNames = product.imageNames;
+            const imageUrls = await getSignedUrlsArray(imageNames);
+
+            productsWithImageURls.push({ product, imageURls: imageUrls })
         }
 
         return {
             code: 200,
             message: 'Product found!',
-            details: product
+            details: productsWithImageURls
         }
     } catch (error: any) {
         return {
