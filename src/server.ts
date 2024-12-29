@@ -1,5 +1,5 @@
-import express, { Application, Request, Response } from 'express';
 import cookieParser from 'cookie-parser';
+import express, { Application, Request, Response } from 'express';
 import morgan from 'morgan';
 import { config } from 'dotenv';
 import { connectDB } from './db/conn';
@@ -17,7 +17,8 @@ const PORT: string | number = process.env.PORT || 3000;
 connectDB();
 
 app.use(morgan('dev'));
-app.use(express.json());
+app.use(express.json({ limit: "1mb" }));
+app.use(express.urlencoded({ limit: "500kb", extended: true }));
 app.use(cookieParser(process.env.JWT_SECRET));
 
 app.use('/auth', authRouter);
