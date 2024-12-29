@@ -1,6 +1,9 @@
+import multer from 'multer';
 import { Request, Response, NextFunction } from "express";
 import { validationResult } from "express-validator";
 import { ReturnResponse } from "../types";
+import { getObjectSignedUrl } from "../s3";
+import type { ErrorRequestHandler } from 'express';
 
 export const asyncHandler =
     (fn: (req: Request, res: Response, next: NextFunction) => Promise<any>) =>
@@ -29,4 +32,32 @@ export const handleRequest = async (
             details: error.toString(),
         });
     }
+};
+
+export const getSignedUrlsArray = async (imageNames: string[]) => {
+    try {
+        const imageUrls = [];
+
+        for (const name of imageNames) {
+            imageUrls.push(await getObjectSignedUrl(name));
+        }
+
+        return imageUrls;
+    } catch (error: any) {
+        throw new Error(`Error generating image url array: ${error.toString()}`);
+    }
+}
+
+export const errorHandler: ErrorRequestHandler = (err, _req, res, next) => {
+    if (err instanceof multer.MulterError) {
+        if (err.code === 'LIMIT_FILE_SIZE') {
+            res.status(413).json({
+                code: 413,
+                message: 'File size too large! Maximum allowed size: 5MB.',
+            });
+
+            return;
+        }
+    }
+    next(err);
 };
