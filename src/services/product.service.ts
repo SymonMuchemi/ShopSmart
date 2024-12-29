@@ -26,7 +26,7 @@ export const createProduct = async (product: IProduct, files: Express.Multer.Fil
                 const resizedImageBuffer: Buffer = await resizeImage(file);
 
                 await uploadImageToS3(resizedImageBuffer, fileName, file.mimetype);
-                
+
                 names.push(fileName);
             }
             console.log("Uploaded image:", names.length)
@@ -75,12 +75,12 @@ export const fechAllProducts = async (): Promise<ReturnResponse> => {
             const imageUrls = []
 
             if (imageNames.length > 0) {
-                for (const name in imageNames) {
+                for (const name of imageNames) {
                     imageUrls.push(await getObjectSignedUrl(name));
                 }
             }
 
-            productsWithImageURls.push({...product, imageURls: imageUrls})
+            productsWithImageURls.push({ product, imageURls: imageUrls })
         }
 
         return {
