@@ -7,7 +7,7 @@ export const uploadImageToS3 = async (fileBuffer: Buffer, fileName: string, mime
         Bucket: bucketName,
         Body: fileBuffer,
         Key: fileName,
-        Type: mimeType
+        ContentType: mimeType
     }
 
     await s3Client.send(new PutObjectCommand(uploadParams));
@@ -17,11 +17,12 @@ export const getObjectSignedUrl = async (key: string) => {
     try {
         const params = {
             Bucket: bucketName,
-            Key: key
+            Key: key,
+            ResponseContentDisposition: "inline"
         }
 
         const command = new GetObjectCommand(params);
-        const seconds = 60 * 10;
+        const seconds = 60 * 60;
 
         return await getSignedUrl(s3Client, command, { expiresIn: seconds });
     } catch (error: any) {
