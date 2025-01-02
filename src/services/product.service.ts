@@ -1,6 +1,6 @@
 import { Product } from "../db/models";
 import { uploadImageToS3 } from "../s3";
-import { genereteFileName, getSignedUrlsArray } from "../utils";
+import { genereteFileName, getSignedProductImageUrlsArray } from "../utils";
 import { IProduct, ReturnResponse, UpdateProduct } from "../types";
 
 export const createProduct = async (
@@ -86,8 +86,7 @@ export const fechAllProducts = async (page = 1, limit = 10): Promise<ReturnRespo
         const productsWithImageURls = [];
 
         for (let product of products) {
-            const imageNames = product.imageNames;
-            const imageUrls = await getSignedUrlsArray(imageNames);
+            const imageUrls = await getSignedProductImageUrlsArray(product);
 
             productsWithImageURls.push({ product, imageURls: imageUrls });
         }
@@ -127,8 +126,7 @@ export const fetchProductByName = async (
             };
         }
 
-        const imageNames = product.imageNames;
-        const imageUrls = await getSignedUrlsArray(imageNames);
+        const imageUrls = await getSignedProductImageUrlsArray(product);
 
         return {
             code: 200,
@@ -163,15 +161,14 @@ export const fetchProductByCategory = async (
                 details: `Cannot find products ${category}`,
             };
         }
-        
+
         const totalItems = await Product.countDocuments();
         const totalPages = Math.ceil(totalItems / limit);
 
         const productsWithImageURls = [];
 
         for (let product of products) {
-            const imageNames = product.imageNames;
-            const imageUrls = await getSignedUrlsArray(imageNames);
+            const imageUrls = await getSignedProductImageUrlsArray(product);
 
             productsWithImageURls.push({ product, imageURls: imageUrls });
         }
@@ -209,10 +206,15 @@ export const fetchProductById = async (id: string): Promise<ReturnResponse> => {
             };
         }
 
+        const imageURls = await getSignedProductImageUrlsArray(product);
+
         return {
             code: 200,
             message: "Product found!",
-            details: product,
+            details: {
+                product,
+                imageURls
+            }
         };
     } catch (error: any) {
         return {

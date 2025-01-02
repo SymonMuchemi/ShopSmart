@@ -1,7 +1,7 @@
 import multer from 'multer';
 import { Request, Response, NextFunction } from "express";
 import { validationResult } from "express-validator";
-import { ReturnResponse } from "../types";
+import { IProduct, ReturnResponse } from "../types";
 import { getObjectSignedUrl } from "../s3";
 import type { ErrorRequestHandler } from 'express';
 
@@ -34,8 +34,13 @@ export const handleRequest = async (
     }
 };
 
-export const getSignedUrlsArray = async (imageNames: string[]) => {
+export const getSignedProductImageUrlsArray = async (product: IProduct) => {
     try {
+        const imageNames: string[] = product.imageNames;
+
+        if (imageNames.length === 0) {
+            return []
+        }
         const imageUrls = [];
 
         for (const name of imageNames) {
