@@ -1,6 +1,6 @@
 import { Product } from "../db/models";
 import { uploadImageToS3 } from "../s3";
-import { genereteFileName, resizeImage, getSignedUrlsArray } from "../utils";
+import { genereteFileName, getSignedUrlsArray } from "../utils";
 import { IProduct, ReturnResponse, UpdateProduct } from "../types";
 
 export const createProduct = async (
@@ -34,9 +34,9 @@ export const createProduct = async (
         for (const file of files) {
             const fileName = genereteFileName();
 
-            const resizedImageBuffer: Buffer = await resizeImage(file);
+            const fileBuffer = file.buffer;
 
-            await uploadImageToS3(resizedImageBuffer, fileName, file.mimetype);
+            await uploadImageToS3(fileBuffer, fileName, file.mimetype);
 
             names.push(fileName);
         }
@@ -95,7 +95,14 @@ export const fechAllProducts = async (page = 1, limit = 10): Promise<ReturnRespo
         return {
             code: 200,
             message: `${products.length} found!`,
-            details: productsWithImageURls,
+            details: {
+                metadata: {
+                    totalItems, totalPages,
+                    currentPage: page,
+                    itemsPerPage: limit
+                },
+                productsWithImageURls
+            }
         };
     } catch (error: any) {
         return {
@@ -138,10 +145,16 @@ export const fetchProductByName = async (
 };
 
 export const fetchProductByCategory = async (
-    category: string
+    category: string,
+    page = 1,
+    limit = 10
 ): Promise<ReturnResponse> => {
     try {
-        const products = await Product.find({ category: category.toLowerCase() });
+        const skip = (page - 1) * limit;
+
+        const products = await Product.find({ category: category.toLowerCase() })
+            .skip(skip)
+            .limit(limit);
 
         if (!products) {
             return {
@@ -150,6 +163,9 @@ export const fetchProductByCategory = async (
                 details: `Cannot find products ${category}`,
             };
         }
+        
+        const totalItems = await Product.countDocuments();
+        const totalPages = Math.ceil(totalItems / limit);
 
         const productsWithImageURls = [];
 
@@ -163,7 +179,14 @@ export const fetchProductByCategory = async (
         return {
             code: 200,
             message: "Product found!",
-            details: productsWithImageURls,
+            details: {
+                metadata: {
+                    totalItems, totalPages,
+                    currentPage: page,
+                    itemsPerPage: limit
+                },
+                productsWithImageURls
+            }
         };
     } catch (error: any) {
         return {

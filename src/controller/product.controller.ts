@@ -21,6 +21,9 @@ export const create = async (req: Request, res: Response) => {
     await handleRequest(req, res, () => createProduct(product, files), PRODUCT_CREATION_ERROR_MSG);
 }
 export const findAll = async (req: Request, res: Response) => {
+    const page = Number.parseInt(req.query.page as string) || 1;
+    const limit = Number.parseInt(req.query.limit as string) || 10;
+
     let productName = req.query.name as string;
     let category = req.query.category as string;
     let id = req.query.id as string;
@@ -35,9 +38,9 @@ export const findAll = async (req: Request, res: Response) => {
     } else if (category) {
         category = category.toLowerCase();
 
-        await handleRequest(req, res, () => fetchProductByCategory(category), PRODUCT_FETCH_ERROR_MSG)
+        await handleRequest(req, res, () => fetchProductByCategory(category, page, limit), PRODUCT_FETCH_ERROR_MSG)
     } else {
-        await handleRequest(req, res, fechAllProducts, PRODUCT_CREATION_ERROR_MSG);
+        await handleRequest(req, res, () => fechAllProducts(page, limit), PRODUCT_CREATION_ERROR_MSG);
     }
 }
 
