@@ -1,7 +1,7 @@
 import { Product } from "../db/models";
 import { uploadImageToS3 } from "../s3";
-import { genereteFileName, getSignedProductImageUrlsArray } from "../utils";
 import { IProduct, ReturnResponse, UpdateProduct } from "../types";
+import { genereteFileName, getSignedProductImageUrlsArray, deleteProductImages } from "../utils";
 
 export const createProduct = async (
     product: IProduct,
@@ -302,14 +302,26 @@ export const updateProductById = async (
 
 export const deleteProduct = async (id: string): Promise<ReturnResponse> => {
     try {
-        const deletedProduct = await Product.findOneAndDelete({ _id: id });
+        const product = await Product.findOne({ _id: id });
 
-        if (!deletedProduct) {
+        if (!product) {
             return {
                 code: 400,
                 message: "Error deleting product",
                 details: `Could not find product with id ${id}`,
             };
+        }
+
+        await deleteProductImages(product);
+
+        const deletedProduct = await Product.deleteOne({_id: id});
+
+        if (!deleteProduct) {
+            return {
+                code: 400,
+                message: "Error deleting product",
+                details: `Could not find product with id ${id}`,
+            }
         }
 
         return {

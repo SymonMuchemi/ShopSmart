@@ -4,6 +4,7 @@ import { validationResult } from "express-validator";
 import { IProduct, ReturnResponse } from "../types";
 import { getObjectSignedUrl } from "../s3";
 import type { ErrorRequestHandler } from 'express';
+import { deleteImageFromBucket } from '../s3/utils';
 
 export const asyncHandler =
     (fn: (req: Request, res: Response, next: NextFunction) => Promise<any>) =>
@@ -50,6 +51,18 @@ export const getSignedProductImageUrlsArray = async (product: IProduct) => {
         return imageUrls;
     } catch (error: any) {
         throw new Error(`Error generating image url array: ${error.toString()}`);
+    }
+}
+
+export const deleteProductImages = async (product: IProduct) => {
+    try {
+        const imageNames = product.imageNames;
+
+        for (const name of imageNames) {
+            await deleteImageFromBucket(name);
+        }
+    } catch (error: any) {
+        throw new Error(`Error deleting images: ${error.toString()}`);
     }
 }
 

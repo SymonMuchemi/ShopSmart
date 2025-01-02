@@ -1,6 +1,12 @@
 import { IMAGE_VIDEO_URL_REGEX } from "./constants";
 import { genereteFileName, resizeImage } from './file-management'
-import { asyncHandler, handleRequest, getSignedProductImageUrlsArray, errorHandler } from "./methods";
+import {
+    asyncHandler,
+    handleRequest,
+    getSignedProductImageUrlsArray,
+    errorHandler,
+    deleteProductImages
+} from "./methods";
 
 export {
     asyncHandler,
@@ -9,5 +15,6 @@ export {
     genereteFileName,
     resizeImage,
     getSignedProductImageUrlsArray,
-    errorHandler
+    errorHandler,
+    deleteProductImages
 }
