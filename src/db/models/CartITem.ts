@@ -6,8 +6,11 @@ const cartITemSchema: Schema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Product'
     },
-    name: {
+    product_name: {
         type: String,
+    },
+    image_url: {
+        type: String
     },
     quantity: {
         type: Number,

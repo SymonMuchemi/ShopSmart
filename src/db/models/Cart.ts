@@ -4,17 +4,19 @@ import { ICart } from "../../types";
 const CartSchema: Schema = new Schema({
     user: {
         type: Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'User',
     },
     cartItems: [{
         type: Schema.Types.ObjectId,
         ref: 'CartItem'
     }],
     total_items: {
-        type: Number
+        type: Number,
+        default: 0
     },
     total_amount: {
-        type: Number
+        type: Number,
+        default: 0
     }
 }, {
     timestamps: true
