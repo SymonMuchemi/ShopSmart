@@ -6,6 +6,11 @@ const cartITemSchema: Schema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Product'
     },
+    cart: {
+        type: Schema.Types.ObjectId,
+        ref: 'Cart'
+    }
+    ,
     product_name: {
         type: String,
     },
@@ -16,7 +21,7 @@ const cartITemSchema: Schema = new Schema({
         type: Number,
         default: 1
     },
-    price: {
+    product_price: {
         type: Number,
         required: true
     },
