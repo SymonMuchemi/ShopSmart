@@ -8,6 +8,7 @@ export interface IUser extends Document {
 }
 
 export interface IProduct extends Document {
+    id: string;
     name: string;
     description: string;
     price: number;
