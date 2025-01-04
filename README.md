@@ -13,7 +13,7 @@ A robust RESTful API for e-commerce operations built with Node.js and MongoDB.
 
 - [x] User Authentication
 - [x] Product Management
-- [ ] image storage
+- [x] image storage
 - [ ] Shopping Cart Operations
 - [ ] Credit Card Payment Integration
 - [ ] MPesa Payment Integration
@@ -58,14 +58,23 @@ A robust RESTful API for e-commerce operations built with Node.js and MongoDB.
 
     ```env
     PORT=3000
-    MONGO_URL=mongodb://localhost:27017/shopsmart
+
+    MONGO_DB_URL=mongodb://localhost:27017/shopsmart
+    
     JWT_SECRET=your_secret_key
     JWT_EXPIRATION=1d
+
     STRIPE_SECRET_KEY=your_stripe_secret_key
+
     MPESA_CONSUMER_KEY=your_mpesa_consumer_key
     MPESA_CONSUMER_SECRET=your_mpesa_consumer_secret
     MPESA_SHORTCODE=your_mpesa_shortcode
     MPESA_PASSKEY=your_mpesa_passkey
+
+    S3_BUCKET_REGION='your_s3_bucket_region'
+    S3_BUCKET_NAME='your_s3_bucket_name'
+    S3_ACCESS_KEY='your_s3_access_key_id'
+    S3_SECRET_ACCESS_KEY='your s3_secret_access_key'
     ```
 
 5. Start the application.
