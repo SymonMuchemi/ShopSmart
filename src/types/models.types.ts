@@ -14,7 +14,6 @@ export interface IProduct extends Document {
     price: number;
     quantity: number;
     imageNames: [string];
-    discount?: number;
     videoUrl?: string;
     category: string;
     imageUrls?: string[];
@@ -29,8 +28,9 @@ export interface ICartItem extends Document {
 }
 
 export interface ICart extends Document {
+    id?: string;
     user: string;
-    cartITems: [string];
+    cartITems: string[];
     total_items: number;
     total_amount: number;
 }

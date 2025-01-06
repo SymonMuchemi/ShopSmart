@@ -1,8 +1,6 @@
-import { disconnect } from "process";
 import { getObjectSignedUrl } from "../../s3";
 import { IProduct } from "../../types";
 import { Cart, CartITem, User } from "../models";
-import { toASCII } from "punycode";
 
 export const createCart = async (userId: string) => {
     try {
@@ -30,18 +28,12 @@ export const createCart = async (userId: string) => {
     }
 }
 
-export const createCartItem = async (product: IProduct, quantity = 1, userId: string) => {
+export const createCartItem = async (userId: string, product: IProduct, quantity = 1) => {
     try {
         const cart = await Cart.findOne({ user: userId });
 
         let cartId;
-        let total_amount = product.price * quantity
-
-        if (product.discount !== undefined) {
-            const discount = total_amount * product.discount;
-
-            total_amount -= discount;
-        }
+        let total_amount = product.price * quantity;
 
         const image_url = await getObjectSignedUrl(product.imageNames[0]);
 
@@ -78,8 +70,54 @@ export const createCartItem = async (product: IProduct, quantity = 1, userId: st
             throw new Error('Could not create cart item');
         }
 
+        // add the cartItemId to the cart
+        const updatedCart = await Cart.findByIdAndUpdate(cart.id, {
+            cartITems: [...cart.cartITems, newCartItem.id]
+        });
+
+        console.log(`Updated cart: ${updatedCart}`);
+
         return newCartItem;
     } catch (error: any) {
         throw new Error(`Error creating cart item: ${error.toString()}`);
     }
-} 
+}
+
+export const updateCartItemQuantity = async (cartItemId: string, quantity: number) => {
+    try {
+        if (quantity < 1) {
+            throw new Error('CartItem cannot be less that 1');
+        }
+
+        const cartItem = await CartITem.findById(cartItemId);
+
+        if (!cartItem) {
+            throw new Error(`Could not get item with id: ${cartItem}`)
+        }
+
+        const updatedCartItem = await CartITem.findByIdAndUpdate(cartItemId, {
+            quantity,
+            total_amount: cartItem.price * quantity
+        })
+
+        if (!updatedCartItem) {
+            throw new Error("Error updating cart item");
+        }
+
+        return updatedCartItem;
+    } catch (error: any) {
+        throw new Error(`Error updating cart item: ${error.toString}`);
+    }
+}
+
+export const deleteCartItem = async (cartItemId: string) => {
+    try {
+        const cartItem = await CartITem.findByIdAndUpdate(cartItemId);
+
+        if (!cartItem) {
+            throw new Error("Error deleting cart Item")
+        }
+    } catch (error) {
+
+    }
+}
