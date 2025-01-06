@@ -21,9 +21,11 @@ export interface IProduct extends Document {
 
 export interface ICartItem extends Document {
     product: string;
-    name: string;
+    cart: string;
+    product_name: string;
+    image_url: string;
     quantity: number;
-    price: number;
+    product_price: number;
     total_amount: number;
 }
 
