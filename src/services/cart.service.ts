@@ -1,4 +1,4 @@
-import { createCartItem, updateCartItemQuantity } from "../db/utils";
+import { createCartItem, deleteCartItem, updateCartItemQuantity } from "../db/utils";
 import { ICart, ICartItem, IProduct, ReturnResponse } from "../types";
 
 export const addToCart = async (userId: string, product: IProduct): Promise<ReturnResponse> => {
@@ -48,6 +48,32 @@ export const updateItemQuantity = async (cartItemId: string, quantity: number): 
         return {
             code: 500,
             message: 'cart.service: error updating item quantity',
+            details: error.toString()
+        }
+    }
+}
+
+export const deleteItem = async (cartItemId: string): Promise<ReturnResponse> => {
+    try {
+        const deletedItem = await deleteCartItem(cartItemId);
+
+        if (!deletedItem) {
+            return {
+                code: 400,
+                message: 'cart.service: could delete item',
+                details: 'db.utils.deleteCartItem returned null'
+            }
+        }
+
+        return {
+            code: 200,
+            message: 'Item deleted successfully',
+            details: deletedItem
+        }
+    } catch (error: any) {
+        return {
+            code: 500,
+            message: 'cart.service: error deleting item',
             details: error.toString()
         }
     }
