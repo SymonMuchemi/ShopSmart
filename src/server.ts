@@ -8,6 +8,7 @@ import { connectDB } from './db/conn';
 // import routes from './routes';
 import authRouter from './routes/auth.routes';
 import productsRouter from './routes/product.routes';
+import cartRouter from './routes/cart.routes';
 
 config();
 
@@ -22,6 +23,7 @@ app.use(express.urlencoded({ limit: "500kb", extended: true }));
 app.use(cookieParser(process.env.JWT_SECRET));
 
 app.use('/auth', authRouter);
+app.use('/cart', cartRouter);
 app.use('/products', productsRouter);
 
 // simple route
