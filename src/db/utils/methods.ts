@@ -18,7 +18,7 @@ export const createCart = async (userId: string) => {
 
         const newCart = await Cart.create({
             user: user._id,
-            cartITems: []
+            cartItems: []
         });
 
         return newCart;
@@ -30,56 +30,36 @@ export const createCart = async (userId: string) => {
 
 export const createCartItem = async (userId: string, product: IProduct, quantity = 1) => {
     try {
-        const cart = await Cart.findOne({ user: userId });
+        const cart = await findOrCreateCart(userId);
 
-        let cartId;
-        let total_amount = product.price * quantity;
+        const existingCartItem = await CartITem.findOne({
+            product: product._id,
+            cart: cart._id
+        });
 
+        if (existingCartItem) throw new Error("Cart item already exists!");
+
+        const total_amount = product.price * quantity;
         const image_url = await getObjectSignedUrl(product.imageNames[0]);
 
-        const cartItemParams = {
-            product: product.id,
-            cart: cartId,
+        const newCartItem = await CartITem.create({
+            product: product._id,
+            cart: cart._id,
             product_name: product.name,
             product_price: product.price,
             image_url, total_amount
-        }
-
-        if (!cart) {
-            // create the cart and retrive the cart id
-            cartId = (await createCart(userId))._id;
-
-            // create cartItem and add it to the cart
-            const newCartItem = CartITem.create(cartItemParams);
-
-            return newCartItem;
-        }
-
-        cartId = cart._id;
-
-        // check if there is a cart item with the product
-        const existingCartItem = await CartITem.findOne({ product: product.id });
-
-        if (existingCartItem) {
-            throw new Error('Cart item already exists!');
-        }
-
-        const newCartItem = await CartITem.create(cartItemParams);
-
-        if (!newCartItem) {
-            throw new Error('Could not create cart item');
-        }
-
-        // add the cartItemId to the cart
-        const updatedCart = await Cart.findByIdAndUpdate(cart.id, {
-            cartITems: [...cart.cartITems, newCartItem.id]
         });
 
-        console.log(`Updated cart: ${updatedCart}`);
+        if (!newCartItem) throw new Error('Failed to create new cart item');
+
+        cart.cartItems.push(newCartItem._id as string);
+        await cart.save();
+
 
         return newCartItem;
+
     } catch (error: any) {
-        throw new Error(`Error creating cart item: ${error.toString()}`);
+        throw new Error(`Error in createCartItem: ${error.toString()}`);
     }
 }
 
@@ -120,4 +100,19 @@ export const deleteCartItem = async (cartItemId: string) => {
     } catch (error) {
 
     }
+}
+
+const findOrCreateCart =  async (userId: string) => {
+    let cart = await Cart.findOne({user: userId});
+
+    if (!cart) {
+        cart = await Cart.create({
+            user: userId,
+            cartItems: [],
+            total_items: 0,
+            total_amount: 0
+        });
+    }
+
+    return cart;
 }
