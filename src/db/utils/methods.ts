@@ -72,12 +72,15 @@ export const updateCartItemQuantity = async (cartItemId: string, quantity: numbe
         const cartItem = await CartITem.findById(cartItemId);
 
         if (!cartItem) {
-            throw new Error(`Could not get item with id: ${cartItem}`)
+            throw new Error(`Could not get item with id: ${cartItemId}`)
         }
+
+
+        const total_amount = cartItem.product_price * quantity;
 
         const updatedCartItem = await CartITem.findByIdAndUpdate(cartItemId, {
             quantity,
-            total_amount: cartItem.price * quantity
+            total_amount
         })
 
         if (!updatedCartItem) {
@@ -86,24 +89,34 @@ export const updateCartItemQuantity = async (cartItemId: string, quantity: numbe
 
         return updatedCartItem;
     } catch (error: any) {
-        throw new Error(`Error updating cart item: ${error.toString}`);
+        throw new Error(`Error in updateCartQuantity: ${error.toString()}`);
     }
 }
 
 export const deleteCartItem = async (cartItemId: string) => {
     try {
-        const cartItem = await CartITem.findByIdAndUpdate(cartItemId);
+        const cartItem = await CartITem.findById(cartItemId);
 
-        if (!cartItem) {
-            throw new Error("Error deleting cart Item")
-        }
-    } catch (error) {
+        if (!cartItem) throw new Error("Error deleting cart Item");
 
+        const cart = await Cart.findById(cartItem?.cart);
+
+        if (!cart) throw new Error('Could not find the cart busket!');
+
+        cart.cartItems = cart.cartItems.filter((item) => item !== cartItemId)
+
+        await cart.save();
+
+        const deletedItem = await CartITem.deleteOne({_id: cartItemId});
+
+        return deletedItem;
+    } catch (error: any) {
+        throw new Error(`Error at deleteCartItem: ${error.toString()}`);
     }
 }
 
-const findOrCreateCart =  async (userId: string) => {
-    let cart = await Cart.findOne({user: userId});
+const findOrCreateCart = async (userId: string) => {
+    let cart = await Cart.findOne({ user: userId });
 
     if (!cart) {
         cart = await Cart.create({
