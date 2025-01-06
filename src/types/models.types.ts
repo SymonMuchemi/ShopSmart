@@ -30,7 +30,7 @@ export interface ICartItem extends Document {
 export interface ICart extends Document {
     id?: string;
     user: string;
-    cartITems: string[];
+    cartItems: string[];
     total_items: number;
     total_amount: number;
 }
