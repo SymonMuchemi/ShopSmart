@@ -53,6 +53,9 @@ export const createCartItem = async (userId: string, product: IProduct, quantity
         if (!newCartItem) throw new Error('Failed to create new cart item');
 
         cart.cartItems.push(newCartItem._id as string);
+        cart.total_items += quantity;
+        cart.total_amount += total_amount;
+
         await cart.save();
 
 
@@ -75,17 +78,24 @@ export const updateCartItemQuantity = async (cartItemId: string, quantity: numbe
             throw new Error(`Could not get item with id: ${cartItemId}`)
         }
 
+        const cart = await Cart.findById(cartItem.cart);
+
+        if (!cart) throw new Error(`Could not find cart with id: ${cartItem.cart}`);
+
+        cart.total_items -= cartItem.quantity;
+        cart.total_amount -= cartItem.total_amount;
 
         const total_amount = cartItem.product_price * quantity;
 
-        const updatedCartItem = await CartITem.findByIdAndUpdate(cartItemId, {
-            quantity,
-            total_amount
-        })
+        cartItem.quantity = quantity;
+        cartItem.total_amount = total_amount;
 
-        if (!updatedCartItem) {
-            throw new Error("Error updating cart item");
-        }
+        cart.total_items += quantity;
+        cart.total_amount += total_amount;
+
+        await cart.save();
+
+        const updatedCartItem = await cartItem.save();
 
         return updatedCartItem;
     } catch (error: any) {
@@ -103,11 +113,15 @@ export const deleteCartItem = async (cartItemId: string) => {
 
         if (!cart) throw new Error('Could not find the cart busket!');
 
-        cart.cartItems = cart.cartItems.filter((item) => item !== cartItemId)
+        const cartItemsArray = cart.cartItems;
+        const updatedItemsArray = cartItemsArray.filter((item) => item !== cartItemId);
 
-        await cart.save();
+        cart.cartItems = updatedItemsArray;
+        cart.total_items -= cartItem.quantity;
 
         const deletedItem = await CartITem.deleteOne({_id: cartItemId});
+
+        await cart.save();
 
         return deletedItem;
     } catch (error: any) {
