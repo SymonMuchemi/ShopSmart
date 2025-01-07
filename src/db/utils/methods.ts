@@ -1,3 +1,4 @@
+import mongoose, { ObjectId } from "mongoose";
 import { getObjectSignedUrl } from "../../s3";
 import { IProduct } from "../../types";
 import { Cart, CartITem, User } from "../models";
@@ -52,7 +53,7 @@ export const createCartItem = async (userId: string, product: IProduct, quantity
 
         if (!newCartItem) throw new Error('Failed to create new cart item');
 
-        cart.cartItems.push(newCartItem._id as string);
+        cart.cartItems.push(newCartItem._id as mongoose.Types.ObjectId);
         cart.total_items += quantity;
         cart.total_amount += total_amount;
 
@@ -107,19 +108,21 @@ export const deleteCartItem = async (cartItemId: string) => {
     try {
         const cartItem = await CartITem.findById(cartItemId);
 
-        if (!cartItem) throw new Error("Error deleting cart Item");
+        if (!cartItem) throw new Error("Error deleting cart item");
 
         const cart = await Cart.findById(cartItem?.cart);
 
-        if (!cart) throw new Error('Could not find the cart busket!');
+        if (!cart) throw new Error('Could not find the cart basket!');
 
-        const cartItemsArray = cart.cartItems;
-        const updatedItemsArray = cartItemsArray.filter((item) => item !== cartItemId);
+        const updatedItemsArray = cart.cartItems.filter((item) => item.toString() !== cartItemId);
 
-        cart.cartItems = updatedItemsArray;
+        console.log(`Updated items array: ${updatedItemsArray}`);
+
+        cart.cartItems = updatedItemsArray.map((id) => new mongoose.Types.ObjectId(id.toString()));
         cart.total_items -= cartItem.quantity;
+        cart.total_amount -= cartItem.total_amount;
 
-        const deletedItem = await CartITem.deleteOne({_id: cartItemId});
+        const deletedItem = await CartITem.deleteOne({ _id: cartItemId });
 
         await cart.save();
 
@@ -127,7 +130,8 @@ export const deleteCartItem = async (cartItemId: string) => {
     } catch (error: any) {
         throw new Error(`Error at deleteCartItem: ${error.toString()}`);
     }
-}
+};
+
 
 const findOrCreateCart = async (userId: string) => {
     let cart = await Cart.findOne({ user: userId });

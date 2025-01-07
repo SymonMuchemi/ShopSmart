@@ -1,4 +1,4 @@
-import { Document } from "mongoose";
+import mongoose, { Document } from "mongoose";
 
 export interface IUser extends Document {
     username: string;
@@ -32,7 +32,7 @@ export interface ICartItem extends Document {
 export interface ICart extends Document {
     id?: string;
     user: string;
-    cartItems: string[];
+    cartItems: mongoose.Types.ObjectId[];
     total_items: number;
     total_amount: number;
 }
