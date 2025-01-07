@@ -7,6 +7,6 @@ const cartRouter = Router();
 
 cartRouter.post('/add', asyncHandler(addProductToCart));
 cartRouter.put('/update', asyncHandler(updateQuantity));
-cartRouter.delete('/remove', asyncHandler(removeFromCart));
+cartRouter.delete('/remove/:itemId', asyncHandler(removeFromCart));
 
 export default cartRouter;
