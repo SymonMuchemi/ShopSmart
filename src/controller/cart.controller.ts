@@ -13,13 +13,13 @@ export const addProductToCart = async (req: Request, res: Response) => {
 }
 
 export const updateQuantity = async (req: Request, res: Response) => {
-    const { cartId, quantity } = req.body;
+    const { cartItemId, quantity } = req.body;
 
-    await handleRequest(req, res, () => updateItemQuantity(cartId, quantity), UPDATE_ITEM_ERROR_MSG);
+    await handleRequest(req, res, () => updateItemQuantity(cartItemId, quantity), UPDATE_ITEM_ERROR_MSG);
 }
 
 export const removeFromCart = async (req: Request, res: Response) => {
-    const { itemId } = req.body;
+    const { itemId } = req.params;
 
     await handleRequest(req, res, () => deleteItem(itemId), DELETE_ITEM_ERROR_MSG);
 }
