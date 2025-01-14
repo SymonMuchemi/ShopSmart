@@ -1,5 +1,5 @@
 import { createCartItem, deleteCartItem, updateCartItemQuantity } from "../db/utils";
-import { ICart, ICartItem, IProduct, ReturnResponse } from "../types";
+import { IProduct, ReturnResponse } from "../types";
 
 export const addToCart = async (userId: string, product: IProduct): Promise<ReturnResponse> => {
     try {

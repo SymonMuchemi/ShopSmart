@@ -37,5 +37,16 @@ export interface ICart extends Document {
     total_amount: number;
 }
 
+export interface PurchaseItem {
+    productId: mongoose.Types.ObjectId;
+    quantity: Number;
+}
+
+export interface IPurchase {
+    id: string;
+    items: PurchaseItem[];
+    status: 'paid' | 'declined'
+}
+
 export type AuthUser = Pick<IUser, 'email' | 'password'>
 export type UpdateProduct = Partial<IProduct>;

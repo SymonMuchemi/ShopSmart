@@ -1,4 +1,4 @@
-import mongoose, { ObjectId } from "mongoose";
+import mongoose from "mongoose";
 import { getObjectSignedUrl } from "../../s3";
 import { IProduct } from "../../types";
 import { Cart, CartITem, User } from "../models";
