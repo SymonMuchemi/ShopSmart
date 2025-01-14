@@ -30,7 +30,7 @@ A robust RESTful API for e-commerce operations built with Node.js and MongoDB.
 - [Mongoose](https://mongoosejs.com/): Object Relational Mapper for MongoDB.
 - [JWT](https://jwt.io/): Secure user authentication.
 - [Stripe](https://stripe.com/): Payment gateway.
-- [MPesa](https://developer.safaricom.co.ke/): Payment gateway.
+- [MPesa](https://developer.safaricom.co.ke/): mobile payment gateway.
 - [Swagger](https://swagger.io/): API documentation.
 - [Jest](https://jestjs.io/): Testing framework.
 
@@ -59,7 +59,7 @@ A robust RESTful API for e-commerce operations built with Node.js and MongoDB.
     ```env
     PORT=3000
 
-    MONGO_DB_URL=mongodb://localhost:27017/shopsmart
+    MONGO_DB_URL=mongodb://localhost:3000/shopsmart
     
     JWT_SECRET=your_secret_key
     JWT_EXPIRATION=1d
@@ -81,14 +81,14 @@ A robust RESTful API for e-commerce operations built with Node.js and MongoDB.
 5. Start the application.
 
     ```bash
-    npm dev
+    npm run dev
     ```
 
 6. Access the application on `http://localhost:3000`.
 
 ## API Documentation
 
-The API documentation will available at `http://localhost:3000/api-docs`.
+The API documentation will be available at `http://localhost:3000/api-docs`.
 
 ## License
 
