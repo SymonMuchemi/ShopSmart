@@ -4,13 +4,9 @@ import { Product, Purchase, User } from '../models';
 
 const enrichedPurchaseItems = async (purchaseItems: PurchaseItem[]) => {
     try {
-        console.log(`Input purchase items: ${JSON.stringify(purchaseItems)}`);
         const productIds = purchaseItems.map((obj) => obj.productId.toString());
-        console.log(`Product ids gotten from map: ${JSON.stringify(productIds)}`);
 
         if (productIds.length === 0) console.log("Products ids array is empty")
-
-        console.log(`Product ids: ${productIds}`)
 
         const products = await Product.find({ _id: { $in: productIds } });
 
@@ -35,8 +31,6 @@ const calculateTotalFromPurchaseItems = async (purchaseItems: PurchaseItem[]) =>
     try {
         const itemsWithPrice = await enrichedPurchaseItems(purchaseItems);
 
-        // console.log(`Items: ${JSON.stringify(itemsWithPrice)}`);
-
         return itemsWithPrice.map(item => {
             const price = Number(item.price);
             const quantity = Number(item.quantity);
@@ -56,18 +50,17 @@ export const recordPurchase = async (userId: string, purchaseItems: PurchaseItem
 
         if (!user) throw new Error(`Could not find user with id: ${userId}`);
 
-        console.log(`User: ${user.username}`);
-
         const total = await calculateTotalFromPurchaseItems(purchaseItems);
 
         if (isNaN(total)) console.log(`Total is not a number; it is ${typeof total}`);
 
-        console.log(`Total amount: ${total}`)
-
         const purchase = await Purchase.create({
             items: purchaseItems,
-            total_amount: total
+            total_amount: total,
+            user: user._id
         });
+
+        if (!purchase) throw new Error('Purchase object not created!');
 
         return purchase;
     } catch (error: any) {
