@@ -1,4 +1,4 @@
-import { PURCHASE_STATUS_ENUM } from './enums';
+import { recordPurchase, markPurchaseAsPaidOrDeclined } from './purchase.methods';
 import {
     createCart,
     updateCartItemQuantity,
@@ -7,9 +7,10 @@ import {
 } from "./cart.methods";
 
 export {
-    PURCHASE_STATUS_ENUM,
     createCart,
     createCartItem,
     updateCartItemQuantity,
-    deleteCartItem
+    deleteCartItem,
+    recordPurchase,
+    markPurchaseAsPaidOrDeclined
 }

@@ -1,19 +1,23 @@
 import mongoose, { Schema } from "mongoose";
 import { IPurchase } from "../../types/models.types";
-import { PURCHASE_STATUS_ENUM } from "../utils";
 
 const purchaseSchema: Schema = new Schema({
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    },
     items: [{
         type: {
-            productId: mongoose.Types.ObjectId,
+            productId: String,
             quantity: Number,
-            require: true
-        }
+        },
+        required: true
     }],
     status: {
         type: String,
-        enum: PURCHASE_STATUS_ENUM,
-        default: PURCHASE_STATUS_ENUM[2]
+        enum: ['paid', 'declined', 'pending'],
+        default: 'pending'
     },
     total_amount: {
         type: Number,

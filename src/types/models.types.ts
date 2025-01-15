@@ -38,7 +38,7 @@ export interface ICart extends Document {
 }
 
 export interface PurchaseItem {
-    productId: mongoose.Types.ObjectId;
+    productId: string;
     quantity: number;
 }
 
