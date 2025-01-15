@@ -1,6 +1,5 @@
-import mongoose from 'mongoose';
 import { PurchaseItem } from '../../types/models.types';
-import { Product, Purchase, User } from '../models';
+import { Product, Purchase, User, Cart, CartITem } from '../models';
 
 const enrichedPurchaseItems = async (purchaseItems: PurchaseItem[]) => {
     try {
@@ -68,7 +67,7 @@ export const recordPurchase = async (userId: string, purchaseItems: PurchaseItem
     }
 }
 
-export const markPurchaseAsPaidOrDeclined = async (purchaseId: mongoose.Types.ObjectId, status: 'paid' | 'declined') => {
+export const markPurchaseAsPaidOrDeclined = async (purchaseId: string, status: 'paid' | 'declined') => {
     try {
         const purchase = await Purchase.findById(purchaseId);
 
@@ -79,5 +78,38 @@ export const markPurchaseAsPaidOrDeclined = async (purchaseId: mongoose.Types.Ob
         await purchase.save();
     } catch (error: any) {
         throw new Error(`${error.toString()}`);
+    }
+}
+
+export const checkoutCart = async (userId: string) => {
+    try {
+        const userCart = await Cart.findOne({ user: userId });
+
+        if (!userCart) {
+            console.log(`Could not find cart with user id: ${userId}`);
+
+            throw new Error("Could not find cart");
+        }
+
+        console.log(`User cart: ${JSON.stringify(userCart)}`);
+
+        const cartItems = await CartITem.find({ _id: { $in: userCart.cartItems } });
+
+        if (cartItems.length === 0) {
+            console.log("User cart is empty");
+
+            throw new Error("User cart is empty");
+        }
+
+        const purchaseItems = [];
+        const grand_total = 0;
+
+        for (const item of cartItems) {
+            console.log(JSON.stringify(item));
+        }
+
+        return cartItems;
+    } catch (error: any) {
+        throw new Error(error.toString());
     }
 }

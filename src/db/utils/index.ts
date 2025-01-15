@@ -1,4 +1,8 @@
-import { recordPurchase, markPurchaseAsPaidOrDeclined } from './purchase.methods';
+import {
+    recordPurchase,
+    markPurchaseAsPaidOrDeclined,
+    checkoutCart
+} from './purchase.methods';
 import {
     createCart,
     updateCartItemQuantity,
@@ -12,5 +16,6 @@ export {
     updateCartItemQuantity,
     deleteCartItem,
     recordPurchase,
-    markPurchaseAsPaidOrDeclined
+    markPurchaseAsPaidOrDeclined,
+    checkoutCart
 }
