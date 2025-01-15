@@ -39,12 +39,13 @@ export interface ICart extends Document {
 
 export interface PurchaseItem {
     productId: mongoose.Types.ObjectId;
-    quantity: Number;
+    quantity: number;
 }
 
 export interface IPurchase {
     id: string;
     items: PurchaseItem[];
+    total_amount: number;
     status: 'paid' | 'declined'
 }
 

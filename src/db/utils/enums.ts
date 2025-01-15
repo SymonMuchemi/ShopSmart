@@ -1,1 +1,1 @@
-export const PURCHASE_STATUS_ENUM = ['paid', 'declined']
+export const PURCHASE_STATUS_ENUM = ['paid', 'declined', 'pending']
