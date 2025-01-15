@@ -1,15 +1,21 @@
 import mongoose from 'mongoose';
 import { PurchaseItem } from '../../types/models.types';
-import { Product, Purchase } from '../models';
+import { Product, Purchase, User } from '../models';
 
 const enrichedPurchaseItems = async (purchaseItems: PurchaseItem[]) => {
     try {
-        const productIds = purchaseItems.map((obj) => obj.productId);
+        console.log(`Input purchase items: ${JSON.stringify(purchaseItems)}`);
+        const productIds = purchaseItems.map((obj) => obj.productId.toString());
+        console.log(`Product ids gotten from map: ${JSON.stringify(productIds)}`);
+
+        if (productIds.length === 0) console.log("Products ids array is empty")
+
+        console.log(`Product ids: ${productIds}`)
 
         const products = await Product.find({ _id: { $in: productIds } });
 
         if (productIds.length === 0) {
-            throw new Error("purchase.methods: could not get products");
+            throw new Error("could not get products");
         }
 
         const productPriceMap = new Map(products.map((product) => [product.id.toString(), product.price]));
@@ -21,13 +27,15 @@ const enrichedPurchaseItems = async (purchaseItems: PurchaseItem[]) => {
 
         return purchaseItemsWithPrice;
     } catch (error: any) {
-        throw new Error(`Purchase.methods: ${error.toString()}`);
+        throw new Error(`${error.toString()}`);
     }
 }
 
 const calculateTotalFromPurchaseItems = async (purchaseItems: PurchaseItem[]) => {
     try {
         const itemsWithPrice = await enrichedPurchaseItems(purchaseItems);
+
+        // console.log(`Items: ${JSON.stringify(itemsWithPrice)}`);
 
         return itemsWithPrice.map(item => {
             const price = Number(item.price);
@@ -38,13 +46,23 @@ const calculateTotalFromPurchaseItems = async (purchaseItems: PurchaseItem[]) =>
             return price * quantity;
         }).reduce((acc, item) => acc + item, 0)
     } catch (error: any) {
-        throw new error(`purchase.methods: ${error.toString()}`);
+        throw new error(`${error.toString()}`);
     }
 }
 
-export const recordPurchase = async (purchaseItems: PurchaseItem[]) => {
+export const recordPurchase = async (userId: string, purchaseItems: PurchaseItem[]) => {
     try {
+        const user = await User.findById(userId);
+
+        if (!user) throw new Error(`Could not find user with id: ${userId}`);
+
+        console.log(`User: ${user.username}`);
+
         const total = await calculateTotalFromPurchaseItems(purchaseItems);
+
+        if (isNaN(total)) console.log(`Total is not a number; it is ${typeof total}`);
+
+        console.log(`Total amount: ${total}`)
 
         const purchase = await Purchase.create({
             items: purchaseItems,
@@ -53,7 +71,7 @@ export const recordPurchase = async (purchaseItems: PurchaseItem[]) => {
 
         return purchase;
     } catch (error: any) {
-        throw new Error(`purchase.methods: ${error.toString()}`);
+        throw new Error(`purchase.methods.recordPurchase: ${error.toString()}`);
     }
 }
 
@@ -67,6 +85,6 @@ export const markPurchaseAsPaidOrDeclined = async (purchaseId: mongoose.Types.Ob
 
         await purchase.save();
     } catch (error: any) {
-        throw new Error(`purchase.methods: ${error.toString()}`);
+        throw new Error(`${error.toString()}`);
     }
 }
