@@ -102,13 +102,33 @@ export const checkoutCart = async (userId: string) => {
         }
 
         const purchaseItems = [];
-        const grand_total = 0;
+        let grand_total = 0;
 
         for (const item of cartItems) {
-            console.log(JSON.stringify(item));
+            const purchaseItem = {
+                productId: item.id,
+                quantity: item.quantity
+            }
+
+            grand_total += item.total_amount;
+
+            purchaseItems.push(purchaseItem)
         }
 
-        return cartItems;
+        console.log(purchaseItems);
+
+        // create purchase record
+        const purchaseRecord = await Purchase.create({
+            user: userId,
+            items: purchaseItems,
+            total_amount: grand_total
+        })
+
+        if (!purchaseRecord) {
+            throw new Error("Could not make purchase");
+        }
+
+        return purchaseRecord;
     } catch (error: any) {
         throw new Error(error.toString());
     }
