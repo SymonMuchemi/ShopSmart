@@ -1,62 +1,20 @@
 import { Product } from "../db/models";
-import { uploadImageToS3 } from "../s3";
+import { createProduct, deleteProductsWithNoImages, fetchAll } from "../db/utils";
 import { IProduct, ReturnResponse, UpdateProduct } from "../types";
-import { genereteFileName, getSignedProductImageUrlsArray, deleteProductImages } from "../utils";
+import { getSignedProductImageUrlsArray, deleteProductImages } from "../utils";
 
-export const createProduct = async (
+export const create = async (
     product: IProduct,
     files: Express.Multer.File[]
 ): Promise<ReturnResponse> => {
     try {
-        const existingProduct = await Product.findOne({
-            name: product.name.toLowerCase(),
-        });
-
-        if (existingProduct) {
-            return {
-                code: 409,
-                message: "Database conflict",
-                details: "product already exists",
-            };
-        }
-
-        console.log("Files in req:", files.length);
-
-        const names = [];
-
-        if (files.length == 0) {
-            return {
-                code: 400,
-                message: "Error creating product",
-                details: "No product image file attached!",
-            };
-        }
-        for (const file of files) {
-            const fileName = genereteFileName();
-
-            const fileBuffer = file.buffer;
-
-            await uploadImageToS3(fileBuffer, fileName, file.mimetype);
-
-            names.push(fileName);
-        }
-        console.log("Uploaded image:", names.length);
-
-        const newProduct = await Product.create({
-            ...product,
-            imageNames: names,
-            name: product.name.toLowerCase(),
-            category: product.category.toLowerCase(),
-            videoUrl: product.videoUrl,
-        });
+        const newProduct = await createProduct(product, files);
 
         return {
             code: 201,
             message: "Product created successfully",
-            details: {
-                newProduct,
-            },
-        };
+            details: newProduct
+        }
     } catch (error: any) {
         return {
             code: 500,
@@ -68,41 +26,13 @@ export const createProduct = async (
 
 export const fechAllProducts = async (page = 1, limit = 10): Promise<ReturnResponse> => {
     try {
-        const skip = (page - 1) * limit;
-
-        const products = await Product.find({}).skip(skip).limit(limit);
-
-        if (!products) {
-            return {
-                code: 400,
-                message: "Error fetching products",
-                details: "No products found!",
-            };
-        }
-
-        const totalItems = await Product.countDocuments();
-        const totalPages = Math.ceil(totalItems / limit);
-
-        const productsWithImageURls = [];
-
-        for (let product of products) {
-            const imageUrls = await getSignedProductImageUrlsArray(product);
-
-            productsWithImageURls.push({ product, imageURls: imageUrls });
-        }
+        const productsData = await fetchAll(page, limit);
 
         return {
             code: 200,
-            message: `${products.length} found!`,
-            details: {
-                metadata: {
-                    totalItems, totalPages,
-                    currentPage: page,
-                    itemsPerPage: limit
-                },
-                productsWithImageURls
-            }
-        };
+            message: `Products found: ${productsData.metadata.total_items}`,
+            details: productsData
+        }
     } catch (error: any) {
         return {
             code: 500,
@@ -314,7 +244,7 @@ export const deleteProduct = async (id: string): Promise<ReturnResponse> => {
 
         await deleteProductImages(product);
 
-        const deletedProduct = await Product.deleteOne({_id: id});
+        const deletedProduct = await Product.deleteOne({ _id: id });
 
         if (!deleteProduct) {
             return {
@@ -337,3 +267,21 @@ export const deleteProduct = async (id: string): Promise<ReturnResponse> => {
         };
     }
 };
+
+export const deletesProductsWithEmptyImageArrays = async (): Promise<ReturnResponse> => {
+    try {
+        const deletedProducts = await deleteProductsWithNoImages();
+
+        return {
+            code: 200,
+            message: "Products deleted successfully",
+            details: deletedProducts
+        }
+    } catch (error: any) {
+        return {
+            code: 200,
+            message: "Error deleting products",
+            details: error.toString()
+        }
+    }
+}

@@ -1,13 +1,14 @@
 import { Request, Response } from "express";
 import { handleRequest } from "../utils";
 import {
-    createProduct,
+    create as createProduct,
     fechAllProducts,
     fetchProductByName,
     fetchProductById,
     fetchProductByCategory,
     updateProductByName,
-    deleteProduct
+    deleteProduct,
+    deletesProductsWithEmptyImageArrays
 } from "../services/product.service";
 
 const PRODUCT_CREATION_ERROR_MSG = "product.controller: Error creating product";
@@ -16,6 +17,7 @@ const PRODUCT_UPDATE_ERROR_MSG = "product.controller: Error updating product";
 const PRODUCT_DELETION_ERROR_MSG = "product.controller: Error deleting product";
 
 export const create = async (req: Request, res: Response) => {
+    console.log(JSON.stringify(req.body));
     const product = req.body;
     const files = req.files as Express.Multer.File[] || [];
     await handleRequest(req, res, () => createProduct(product, files), PRODUCT_CREATION_ERROR_MSG);
@@ -62,4 +64,8 @@ export const deleteById = async (req: Request, res: Response) => {
     const id = req.params.id as string;
 
     await handleRequest(req, res, () => deleteProduct(id), PRODUCT_DELETION_ERROR_MSG)
+}
+
+export const deleteImageLess = async (req: Request, res: Response) => {
+    await handleRequest(req, res, deletesProductsWithEmptyImageArrays, PRODUCT_DELETION_ERROR_MSG);
 }
