@@ -1,7 +1,8 @@
 import {
     createProduct,
     deleteProductsWithNoImages,
-    fetchAllProducts as fetchAll
+    fetchAllProducts as fetchAll,
+    fetchByNameOrId
 } from './product.methods';
 import {
     recordPurchase,
@@ -25,5 +26,6 @@ export {
     checkoutCart,
     createProduct,
     deleteProductsWithNoImages,
-    fetchAll
+    fetchAll,
+    fetchByNameOrId
 }
