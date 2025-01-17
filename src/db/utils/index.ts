@@ -1,4 +1,9 @@
 import {
+    createProduct,
+    deleteProductsWithNoImages,
+    fetchAllProducts as fetchAll
+} from './product.methods';
+import {
     recordPurchase,
     markPurchaseAsPaidOrDeclined,
     checkoutCart
@@ -17,5 +22,8 @@ export {
     deleteCartItem,
     recordPurchase,
     markPurchaseAsPaidOrDeclined,
-    checkoutCart
+    checkoutCart,
+    createProduct,
+    deleteProductsWithNoImages,
+    fetchAll
 }

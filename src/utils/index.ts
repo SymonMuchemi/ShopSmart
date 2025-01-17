@@ -1,5 +1,5 @@
 import { IMAGE_VIDEO_URL_REGEX } from "./constants";
-import { genereteFileName, resizeImage } from './file-management'
+import { generateFileName, resizeImage } from './file-management'
 import {
     asyncHandler,
     handleRequest,
@@ -12,7 +12,7 @@ export {
     asyncHandler,
     handleRequest,
     IMAGE_VIDEO_URL_REGEX,
-    genereteFileName,
+    generateFileName,
     resizeImage,
     getSignedProductImageUrlsArray,
     errorHandler,
