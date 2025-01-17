@@ -3,3 +3,5 @@ export interface ReturnResponse {
     message: string;
     details: any;
 }
+
+export type param = string | undefined;

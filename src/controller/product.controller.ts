@@ -1,11 +1,9 @@
 import { Request, Response } from "express";
 import { handleRequest } from "../utils";
 import {
+    fetchProductByNameOrId,
+    fetchProducts,
     create as createProduct,
-    fechAllProducts,
-    fetchProductByName,
-    fetchProductById,
-    fetchProductByCategory,
     updateProductByName,
     deleteProduct,
     deletesProductsWithEmptyImageArrays
@@ -17,7 +15,6 @@ const PRODUCT_UPDATE_ERROR_MSG = "product.controller: Error updating product";
 const PRODUCT_DELETION_ERROR_MSG = "product.controller: Error deleting product";
 
 export const create = async (req: Request, res: Response) => {
-    console.log(JSON.stringify(req.body));
     const product = req.body;
     const files = req.files as Express.Multer.File[] || [];
     await handleRequest(req, res, () => createProduct(product, files), PRODUCT_CREATION_ERROR_MSG);
@@ -30,19 +27,15 @@ export const findAll = async (req: Request, res: Response) => {
     let category = req.query.category as string;
     let id = req.query.id as string;
 
-    if (productName) {
-        productName = productName.toLowerCase();
-
-        await handleRequest(req, res, () => fetchProductByName(productName), PRODUCT_FETCH_ERROR_MSG);
-    } else if (id) {
-        await handleRequest(req, res, () => fetchProductById(id), PRODUCT_FETCH_ERROR_MSG);
-        
-    } else if (category) {
-        category = category.toLowerCase();
-
-        await handleRequest(req, res, () => fetchProductByCategory(category, page, limit), PRODUCT_FETCH_ERROR_MSG)
+    if (id !== undefined) {
+        console.log(`Product id: ${id}`);
+        await handleRequest(req, res, () => fetchProductByNameOrId(productName, id = id), PRODUCT_FETCH_ERROR_MSG);
+    } else if (productName !== undefined) {
+        await handleRequest(req, res, () => fetchProductByNameOrId(productName = productName), PRODUCT_FETCH_ERROR_MSG);
+    } else if (category !== undefined) {
+        await handleRequest(req, res, () => fetchProducts(page, limit, category = category), PRODUCT_FETCH_ERROR_MSG)
     } else {
-        await handleRequest(req, res, () => fechAllProducts(page, limit), PRODUCT_CREATION_ERROR_MSG);
+        await handleRequest(req, res, () => fetchProducts(), PRODUCT_FETCH_ERROR_MSG)
     }
 }
 

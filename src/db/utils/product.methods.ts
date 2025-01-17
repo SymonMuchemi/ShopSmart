@@ -2,6 +2,7 @@ import { IProduct } from "../../types";
 import { Product } from "../models";
 import { generateFileName, getSignedProductImageUrlsArray } from "../../utils";
 import { uploadImageToS3 } from "../../s3";
+import { param } from "../../types/response.type";
 
 export const createProduct = async (product: IProduct, files: Express.Multer.File[]) => {
     try {
@@ -62,11 +63,21 @@ export const deleteProductsWithNoImages = async () => {
     }
 }
 
-export const fetchAllProducts = async (page = 1, limit = 10) => {
+export const fetchAllProducts = async (
+    page = 1,
+    limit = 10,
+    category: param = undefined,
+) => {
     try {
         const skip = (page - 1) * limit;
 
-        const products = await Product.find({}).skip(skip).limit(limit);
+        let products;
+
+        if (category !== undefined) {
+            products = await Product.find({ category: category.toLowerCase() }).skip(skip).limit(limit);
+        } else {
+            products = await Product.find({}).skip(skip).limit(limit);
+        }
 
         if (!products) throw new Error("Could not fetch products");
 
@@ -78,7 +89,7 @@ export const fetchAllProducts = async (page = 1, limit = 10) => {
         for (const product of products) {
             const imageURLs = await getSignedProductImageUrlsArray(product);
 
-            productsWithImageURls.push(product, imageURLs);
+            productsWithImageURls.push({ product, imageURLs });
         }
 
         return {
@@ -91,5 +102,28 @@ export const fetchAllProducts = async (page = 1, limit = 10) => {
         }
     } catch (error: any) {
         throw new Error(`products.methods ${error.toString()}`);
+    }
+}
+
+export const fetchByNameOrId = async (productName: param = undefined, id: param = undefined) => {
+    try {
+        console.log(`Name: ${productName}\nID: ${id}`);
+        if (productName === undefined && id === undefined) throw new Error('No name or id passed!');
+
+        let product;
+
+        if (productName) {
+            product = await Product.findOne({ name: productName.toLowerCase() });
+        } else {
+            product = await Product.findById(id);
+        }
+
+        if (!product) throw new Error("Could not fetch product");
+
+        const imageURLs = await getSignedProductImageUrlsArray(product);
+
+        return { product, imageURLs };
+    } catch (error: any) {
+        throw new Error(`product.methods ${error.toString()}`);
     }
 }

@@ -1,7 +1,9 @@
 import { Product } from "../db/models";
 import { createProduct, deleteProductsWithNoImages, fetchAll } from "../db/utils";
 import { IProduct, ReturnResponse, UpdateProduct } from "../types";
-import { getSignedProductImageUrlsArray, deleteProductImages } from "../utils";
+import { deleteProductImages } from "../utils";
+import { fetchByNameOrId } from "../db/utils";
+import { param } from "../types/response.type";
 
 export const create = async (
     product: IProduct,
@@ -24,9 +26,14 @@ export const create = async (
     }
 };
 
-export const fechAllProducts = async (page = 1, limit = 10): Promise<ReturnResponse> => {
+export const fetchProducts = async (
+    page = 1,
+    limit = 10,
+    name: param = undefined,
+    category: param = undefined,
+): Promise<ReturnResponse> => {
     try {
-        const productsData = await fetchAll(page, limit);
+        const productsData = await fetchAll(page, limit, category);
 
         return {
             code: 200,
@@ -42,27 +49,18 @@ export const fechAllProducts = async (page = 1, limit = 10): Promise<ReturnRespo
     }
 };
 
-export const fetchProductByName = async (
-    name: string
+export const fetchProductByNameOrId = async (
+    productName: param = undefined,
+    id: param = undefined
 ): Promise<ReturnResponse> => {
     try {
-        const product = await Product.findOne({ name: name.toLowerCase() });
-
-        if (!product) {
-            return {
-                code: 400,
-                message: "Error fetching product",
-                details: `Cannot find product: ${name}`,
-            };
-        }
-
-        const imageUrls = await getSignedProductImageUrlsArray(product);
+        const product = await fetchByNameOrId(productName, id);
 
         return {
             code: 200,
-            message: "Product found!",
-            details: { product, imageUrls: imageUrls },
-        };
+            message: `Product found!`,
+            details: product
+        }
     } catch (error: any) {
         return {
             code: 500,
@@ -72,88 +70,6 @@ export const fetchProductByName = async (
     }
 };
 
-export const fetchProductByCategory = async (
-    category: string,
-    page = 1,
-    limit = 10
-): Promise<ReturnResponse> => {
-    try {
-        const skip = (page - 1) * limit;
-
-        const products = await Product.find({ category: category.toLowerCase() })
-            .skip(skip)
-            .limit(limit);
-
-        if (!products) {
-            return {
-                code: 400,
-                message: "Error fetching product",
-                details: `Cannot find products ${category}`,
-            };
-        }
-
-        const totalItems = await Product.countDocuments();
-        const totalPages = Math.ceil(totalItems / limit);
-
-        const productsWithImageURls = [];
-
-        for (let product of products) {
-            const imageUrls = await getSignedProductImageUrlsArray(product);
-
-            productsWithImageURls.push({ product, imageURls: imageUrls });
-        }
-
-        return {
-            code: 200,
-            message: "Product found!",
-            details: {
-                metadata: {
-                    totalItems, totalPages,
-                    currentPage: page,
-                    itemsPerPage: limit
-                },
-                productsWithImageURls
-            }
-        };
-    } catch (error: any) {
-        return {
-            code: 500,
-            message: "Internal server error",
-            details: error.toString(),
-        };
-    }
-};
-
-export const fetchProductById = async (id: string): Promise<ReturnResponse> => {
-    try {
-        const product = await Product.findOne({ _id: id });
-
-        if (!product) {
-            return {
-                code: 400,
-                message: "Error fetching product",
-                details: `Cannot find product with id: ${id}`,
-            };
-        }
-
-        const imageURls = await getSignedProductImageUrlsArray(product);
-
-        return {
-            code: 200,
-            message: "Product found!",
-            details: {
-                product,
-                imageURls
-            }
-        };
-    } catch (error: any) {
-        return {
-            code: 500,
-            message: "Internal server error",
-            details: error.toString(),
-        };
-    }
-};
 export const updateProductByName = async (
     name: string,
     updateData: UpdateProduct
