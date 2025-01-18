@@ -120,7 +120,7 @@ export const fetchByNameOrId = async (productName: param = undefined, id: param 
 
         if (!product) throw new Error("Could not fetch product");
 
-        const imageURLs = await getSignedProductImageUrlsArray(product);
+        const imageURLs: string[] = await getSignedProductImageUrlsArray(product);
 
         return { product, imageURLs };
     } catch (error: any) {
