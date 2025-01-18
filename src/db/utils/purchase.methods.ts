@@ -158,7 +158,9 @@ export const clearUserCart = async (userId: string) => {
 }
 
 const isProductPurchasable = async (productId: string, quantity: number): Promise<boolean> => {
-    const product = await Product.findOne({ id: productId });
+    const product = await Product.findOne({ _id: productId });
+
+    console.log(`Product id: ${productId} Product: ${product?.name}`);
 
     if (!product) return false;
 
@@ -187,7 +189,7 @@ const clearProduct = async (productId: string, quantity: number) => {
 
 const getProductQuantityMapFromCartItem = async (itemId: string) => {
     try {
-        const cartItem = await CartITem.findOne({ id: itemId });
+        const cartItem = await CartITem.findOne({ _id: itemId });
 
         if (!cartItem) throw new Error("Could not find cart item");
 
