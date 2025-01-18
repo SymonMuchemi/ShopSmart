@@ -73,7 +73,7 @@ export const updateCartItemQuantity = async (cartItemId: string, quantity: numbe
             throw new Error('CartItem cannot be less that 1');
         }
 
-        const cartItem = await CartITem.findById(cartItemId);
+        const cartItem = await CartITem.findOne({ _id: cartItemId });
 
         if (!cartItem) {
             throw new Error(`Could not get item with id: ${cartItemId}`)
