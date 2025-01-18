@@ -133,9 +133,15 @@ export const clearUserCart = async (userId: string) => {
 
         if (!cart) throw new Error("Could not find user's cart");
 
-        const productIds = cart.cartItems;
+        const itemIds = cart.cartItems;
 
-        const deletedItems = await CartITem.deleteMany({ _id: { $in: productIds } });
+        for (const item of itemIds) {
+            const product = await getProductQuantityMapFromCartItem(item.toString());
+
+            await clearProduct(product.id, product.quantity);
+        }
+
+        const deletedItems = await CartITem.deleteMany({ _id: { $in: itemIds } });
 
         if (!deletedItems) throw new Error("Could not clear user's cart");
 
@@ -159,4 +165,34 @@ const isProductPurchasable = async (productId: string, quantity: number): Promis
     if (product.quantity < quantity) return false;
 
     return true;
+}
+
+const clearProduct = async (productId: string, quantity: number) => {
+    try {
+        const isPurchasable = await isProductPurchasable(productId, quantity);
+
+        if (!isPurchasable) throw new Error("Product cannot be purchased");
+
+        const product = await Product.findById(productId);
+
+        if (!product) throw new Error("Product not found!");
+
+        product.quantity -= quantity;
+
+        await product.save();
+    } catch (error: any) {
+        throw new Error(error.toString());
+    }
+}
+
+const getProductQuantityMapFromCartItem = async (itemId: string) => {
+    try {
+        const cartItem = await CartITem.findOne({ id: itemId });
+
+        if (!cartItem) throw new Error("Could not find cart item");
+
+        return { id: cartItem.product.toString(), quantity: cartItem.quantity };
+    } catch (error: any) {
+        throw new Error(error.toString());
+    }
 }
