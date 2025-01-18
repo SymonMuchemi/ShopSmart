@@ -5,7 +5,7 @@ const enrichedPurchaseItems = async (purchaseItems: PurchaseItem[]) => {
     try {
         const productIds = purchaseItems.map((obj) => obj.productId.toString());
 
-        if (productIds.length === 0) console.log("Products ids array is empty")
+        if (productIds.length === 0) throw new Error("Products ids array is empty")
 
         const products = await Product.find({ _id: { $in: productIds } });
 
@@ -86,18 +86,12 @@ export const checkoutCart = async (userId: string) => {
         const userCart = await Cart.findOne({ user: userId });
 
         if (!userCart) {
-            console.log(`Could not find cart with user id: ${userId}`);
-
             throw new Error("Could not find cart");
         }
-
-        console.log(`User cart: ${JSON.stringify(userCart)}`);
 
         const cartItems = await CartITem.find({ _id: { $in: userCart.cartItems } });
 
         if (cartItems.length === 0) {
-            console.log("User cart is empty");
-
             throw new Error("User cart is empty");
         }
 
@@ -114,8 +108,6 @@ export const checkoutCart = async (userId: string) => {
 
             purchaseItems.push(purchaseItem)
         }
-
-        console.log(purchaseItems);
 
         const purchaseRecord = await Purchase.create({
             user: userId,

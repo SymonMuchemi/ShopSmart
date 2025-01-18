@@ -116,8 +116,6 @@ export const deleteCartItem = async (cartItemId: string) => {
 
         const updatedItemsArray = cart.cartItems.filter((item) => item.toString() !== cartItemId);
 
-        console.log(`Updated items array: ${updatedItemsArray}`);
-
         cart.cartItems = updatedItemsArray.map((id) => new mongoose.Types.ObjectId(id.toString()));
         cart.total_items -= cartItem.quantity;
         cart.total_amount -= cartItem.total_amount;

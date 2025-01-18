@@ -28,7 +28,6 @@ export const findAll = async (req: Request, res: Response) => {
     let id = req.query.id as string;
 
     if (id !== undefined) {
-        console.log(`Product id: ${id}`);
         await handleRequest(req, res, () => fetchProductByNameOrId(productName, id = id), PRODUCT_FETCH_ERROR_MSG);
     } else if (productName !== undefined) {
         await handleRequest(req, res, () => fetchProductByNameOrId(productName = productName), PRODUCT_FETCH_ERROR_MSG);
