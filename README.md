@@ -15,6 +15,7 @@ A robust RESTful API for e-commerce operations built with Node.js and MongoDB.
 - [x] Product Management
 - [x] image storage
 - [x] Shopping Cart Operations
+- [x] Purchase Management
 - [ ] Credit Card Payment Integration
 - [ ] MPesa Payment Integration
 - [ ] Order Management
