@@ -128,8 +128,32 @@ export const checkoutCart = async (userId: string) => {
             throw new Error("Could not make purchase");
         }
 
+        await clearUserCart(userId);
+
         return purchaseRecord;
     } catch (error: any) {
         throw new Error(error.toString());
+    }
+}
+
+export const clearUserCart = async (userId: string) => {
+    try {
+        const cart = await Cart.findOne({ user: userId });
+
+        if (!cart) throw new Error("Could not find user's cart");
+
+        const productIds = cart.cartItems;
+
+        const deletedItems = await CartITem.deleteMany({ _id: { $in: productIds } });
+
+        if (!deletedItems) throw new Error("Could not clear user's cart");
+
+        cart.cartItems = []
+
+        await cart.save();
+
+        return deletedItems;
+    } catch (error: any) {
+        throw new Error(`purchase.methods ${error.toString()}`)
     }
 }
