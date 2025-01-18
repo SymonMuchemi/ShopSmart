@@ -198,3 +198,31 @@ const getProductQuantityMapFromCartItem = async (itemId: string) => {
         throw new Error(error.toString());
     }
 }
+
+export const getUserPurchaseHistory = async (userId: string, page: number = 1, limit: number = 10) => {
+    try {
+        const existingUser = await User.findById(userId);
+
+        if (!existingUser) throw new Error(`Could not find user with id: ${userId}`);
+
+        const skip = (page - 1) * limit;
+
+        const userPurchases = await Purchase.find({ user: userId }).skip(skip).limit(limit);
+
+        const total_items = await Purchase.countDocuments();
+        const total_pages = Math.ceil(total_items / limit);
+
+        console.log({ userId, page, limit });
+
+        return {
+            metadata: {
+                total_items, total_pages,
+                current_page: page,
+                items_per_page: limit
+            },
+            userPurchases
+        }
+    } catch (error: any) {
+        throw new Error(`purchase.methods.getUserPurchaseHistory ${error.toString()}`)
+    }
+}

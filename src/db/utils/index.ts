@@ -2,12 +2,13 @@ import {
     createProduct,
     deleteProductsWithNoImages,
     fetchAllProducts as fetchAll,
-    fetchByNameOrId
+    fetchByNameOrId    
 } from './product.methods';
 import {
     recordPurchase,
     markPurchaseAsPaidOrDeclined,
-    checkoutCart
+    checkoutCart,
+    getUserPurchaseHistory
 } from './purchase.methods';
 import {
     createCart,
@@ -27,5 +28,6 @@ export {
     createProduct,
     deleteProductsWithNoImages,
     fetchAll,
-    fetchByNameOrId
+    fetchByNameOrId,
+    getUserPurchaseHistory
 }
