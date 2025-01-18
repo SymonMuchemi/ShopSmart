@@ -117,7 +117,6 @@ export const checkoutCart = async (userId: string) => {
 
         console.log(purchaseItems);
 
-        // create purchase record
         const purchaseRecord = await Purchase.create({
             user: userId,
             items: purchaseItems,
@@ -149,6 +148,8 @@ export const clearUserCart = async (userId: string) => {
         if (!deletedItems) throw new Error("Could not clear user's cart");
 
         cart.cartItems = []
+        cart.total_amount = 0;
+        cart.total_items = 0;
 
         await cart.save();
 
@@ -156,4 +157,14 @@ export const clearUserCart = async (userId: string) => {
     } catch (error: any) {
         throw new Error(`purchase.methods ${error.toString()}`)
     }
+}
+
+const isProductPurchasable = async (productId: string, quantity: number): Promise<boolean> => {
+    const product = await Product.findOne({ id: productId });
+
+    if (!product) return false;
+
+    if (product.quantity < quantity) return false;
+
+    return true;
 }
