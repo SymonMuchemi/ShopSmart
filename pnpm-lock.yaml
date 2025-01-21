@@ -69,6 +69,9 @@ importers:
       '@typescript-eslint/parser':
         specifier: ^8.21.0
         version: 8.21.0(eslint@9.18.0)(typescript@5.7.2)
+      console-log-colors:
+        specifier: ^0.5.0
+        version: 0.5.0
       eslint:
         specifier: ^9.18.0
         version: 9.18.0
@@ -1310,6 +1313,10 @@ packages:
   concat-stream@1.6.2:
     resolution: {integrity: sha512-27HBghJxjiZtIk3Ycvn/4kbJk/1uZuJFfuPEns6LaEvpvG1f0hTea8lilrouyo9mVc2GWdcEZ8OLoGmSADlrCw==}
     engines: {'0': node >= 0.8}
+
+  console-log-colors@0.5.0:
+    resolution: {integrity: sha512-ixjGY06zMLCnNXeBdDKL6GuS1+/yQ1GorbZ9YsptP6jDgLqk/bBdQ5cTQvVveKUbO8Th6zwIhY8yRwhrpjXk6g==}
+    engines: {node: '>= 4.1.0'}
 
   content-disposition@0.5.4:
     resolution: {integrity: sha512-FveZTNuGw04cxlAiWbzi6zTAL/lhehaWbTtgluJh4/E95DqMwTmha3KZN1aAWA8cFIhHzMZUvLevkw5Rqk+tSQ==}
@@ -4615,6 +4622,8 @@ snapshots:
       inherits: 2.0.4
       readable-stream: 2.3.8
       typedarray: 0.0.6
+
+  console-log-colors@0.5.0: {}
 
   content-disposition@0.5.4:
     dependencies:

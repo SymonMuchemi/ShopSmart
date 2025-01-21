@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import logger from 'console-log-colorizer'
+import { color } from 'console-log-colors'
 import mongoose from 'mongoose'
 
 export const connectDB = async () => {
@@ -12,8 +14,8 @@ export const connectDB = async () => {
 
     const conn = await mongoose.connect(DBUrl);
 
-    console.log(`MongoDB Connected: ${conn.connection.host}`);
+    console.info(color.blueBright.underline(`MongoDB Connected: ${conn.connection.host}`));
   } catch (error: any) {
-    console.log(`Mongodb connection error: ${error.toString()}`)
+    console.error(color.redBright.italic(`Mongodb connection error: ${error.toString()}`))
   }
 }

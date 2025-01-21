@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import cookieParser from 'cookie-parser'
 import express, { Application, Request, Response } from 'express'
 import morgan from 'morgan'
 import { config } from 'dotenv'
 import { connectDB } from './db/conn'
+import { color } from 'console-log-colors'
 
 // TODO: Find shorter method to import and use all routes
 // import routes from './routes';
@@ -33,6 +35,11 @@ app.get('/hello-world', (req: Request, res: Response) => {
   res.send('Hello from smartshop')
 })
 
-app.listen(PORT, () => {
-  console.log(`app is running on http://localhost:${PORT}`)
+const server = app.listen(PORT, () => {
+  console.log(color.yellow.bold(`app is running on http://localhost:${PORT}`))
+})
+
+process.on('unhandledRejection', (err: any) => {
+  console.warn(`${err.message}`)
+  server.close(() => process.exit(1))
 })
