@@ -107,7 +107,6 @@ export const fetchAllProducts = async (
 
 export const fetchByNameOrId = async (productName: param = undefined, id: param = undefined) => {
     try {
-        console.log(`Name: ${productName}\nID: ${id}`);
         if (productName === undefined && id === undefined) throw new Error('No name or id passed!');
 
         let product;
@@ -118,7 +117,7 @@ export const fetchByNameOrId = async (productName: param = undefined, id: param 
             product = await Product.findById(id);
         }
 
-        if (!product) throw new Error("Could not fetch product");
+        if (!product) return null;
 
         const imageURLs: string[] = await getSignedProductImageUrlsArray(product);
 

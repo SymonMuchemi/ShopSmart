@@ -56,6 +56,14 @@ export const fetchProductByNameOrId = async (
     try {
         const product = await fetchByNameOrId(productName, id);
 
+        if (product === null) {
+            return {
+                code: 404,
+                message: 'Could not find product',
+                details: `Product with ${productName ? 'name: ' + productName : 'id: ' + id} does not exist!`
+            }
+        }
+
         return {
             code: 200,
             message: `Product found!`,
@@ -195,7 +203,7 @@ export const deletesProductsWithEmptyImageArrays = async (): Promise<ReturnRespo
         }
     } catch (error: any) {
         return {
-            code: 200,
+            code: 500,
             message: "Error deleting products",
             details: error.toString()
         }
