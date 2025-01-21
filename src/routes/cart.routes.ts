@@ -5,8 +5,11 @@ import { addProductToCart, removeFromCart, updateQuantity } from "../controller/
 
 const cartRouter = Router();
 
-cartRouter.post('/add', asyncHandler(addProductToCart));
-cartRouter.put('/update', asyncHandler(updateQuantity));
-cartRouter.delete('/remove/:itemId', asyncHandler(removeFromCart));
+cartRouter.route('/')
+    .post(asyncHandler(addProductToCart))
+    .put(asyncHandler(updateQuantity))
+
+cartRouter.route('/:id')
+    .delete(asyncHandler(removeFromCart));
 
 export default cartRouter;

@@ -108,6 +108,7 @@ export const deleteCartItem = async (cartItemId: string) => {
     try {
         const cartItem = await CartITem.findById(cartItemId);
 
+        console.log(cartItem ? JSON.stringify(cartItem) : 'Could not find cart item');
         if (!cartItem) throw new Error("Error deleting cart item");
 
         const cart = await Cart.findById(cartItem?.cart);

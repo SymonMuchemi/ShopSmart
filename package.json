@@ -7,10 +7,14 @@
     "test": "jest --watchAll",
     "bild": "tsc",
     "start": "node dist/server.js",
-    "dev": "nodemon src/server.ts"
+    "dev": "nodemon src/server.ts",
+    "lint": "./node_modules/.bin/eslint",
+    "lint:fix": "./node_modules/.bin/eslint --fix",
+    "format": "prettier --write 'src/**/*.{ts,tsx,js,jsx,json,css,scss,html}'",
+    "check-format": "prettier --check 'src/**/*.{ts,tsx,js,jsx,json,css,scss,html}'"
   },
   "keywords": [],
-  "author": "",
+  "author": "SymonMuchemi",
   "license": "ISC",
   "dependencies": {
     "@aws-sdk/client-s3": "^3.717.0",
@@ -24,6 +28,7 @@
     "sharp": "^0.33.5"
   },
   "devDependencies": {
+    "@eslint/js": "^9.18.0",
     "@types/bcryptjs": "^2.4.6",
     "@types/cookie-parser": "^1.4.8",
     "@types/express": "^5.0.0",
@@ -32,12 +37,19 @@
     "@types/morgan": "^1.9.9",
     "@types/multer": "^1.4.12",
     "@types/node": "^22.10.2",
+    "@typescript-eslint/eslint-plugin": "^8.21.0",
+    "@typescript-eslint/parser": "^8.21.0",
+    "eslint": "^9.18.0",
+    "eslint-config-prettier": "^10.0.1",
+    "globals": "^15.14.0",
     "mongoose": "^8.9.2",
     "morgan": "^1.10.0",
     "multer": "1.4.5-lts.1",
     "nodemon": "^3.1.9",
+    "prettier": "^3.4.2",
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.21.0"
   }
 }
