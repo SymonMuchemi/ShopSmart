@@ -1,30 +1,35 @@
-import mongoose, { Schema } from "mongoose";
-import { IPurchase } from "../../types/models.types";
+import mongoose, { Schema } from 'mongoose'
+import { IPurchase } from '../../types/models.types'
 
-const purchaseSchema: Schema = new Schema({
+const purchaseSchema: Schema = new Schema(
+  {
     user: {
-        type: Schema.Types.ObjectId,
-        ref: 'User',
-        required: true
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
     },
-    items: [{
+    items: [
+      {
         type: {
-            productId: String,
-            quantity: Number,
+          productId: String,
+          quantity: Number,
         },
-        required: true
-    }],
+        required: true,
+      },
+    ],
     status: {
-        type: String,
-        enum: ['paid', 'declined', 'pending'],
-        default: 'pending'
+      type: String,
+      enum: ['paid', 'declined', 'pending'],
+      default: 'pending',
     },
     total_amount: {
-        type: Number,
-        default: 0
-    }
-}, {
-    timestamps: true
-});
+      type: Number,
+      default: 0,
+    },
+  },
+  {
+    timestamps: true,
+  },
+)
 
-export default mongoose.model<IPurchase>('Purchase', purchaseSchema);
+export default mongoose.model<IPurchase>('Purchase', purchaseSchema)

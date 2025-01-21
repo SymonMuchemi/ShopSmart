@@ -1,33 +1,33 @@
 import {
-    createProduct,
-    deleteProductsWithNoImages,
-    fetchAllProducts as fetchAll,
-    fetchByNameOrId    
-} from './product.methods';
+  createProduct,
+  deleteProductsWithNoImages,
+  fetchAllProducts as fetchAll,
+  fetchByNameOrId,
+} from './product.methods'
 import {
-    recordPurchase,
-    markPurchaseAsPaidOrDeclined,
-    checkoutCart,
-    getUserPurchaseHistory
-} from './purchase.methods';
+  recordPurchase,
+  markPurchaseAsPaidOrDeclined,
+  checkoutCart,
+  getUserPurchaseHistory,
+} from './purchase.methods'
 import {
-    createCart,
-    updateCartItemQuantity,
-    createCartItem,
-    deleteCartItem
-} from "./cart.methods";
+  createCart,
+  updateCartItemQuantity,
+  createCartItem,
+  deleteCartItem,
+} from './cart.methods'
 
 export {
-    createCart,
-    createCartItem,
-    updateCartItemQuantity,
-    deleteCartItem,
-    recordPurchase,
-    markPurchaseAsPaidOrDeclined,
-    checkoutCart,
-    createProduct,
-    deleteProductsWithNoImages,
-    fetchAll,
-    fetchByNameOrId,
-    getUserPurchaseHistory
+  createCart,
+  createCartItem,
+  updateCartItemQuantity,
+  deleteCartItem,
+  recordPurchase,
+  markPurchaseAsPaidOrDeclined,
+  checkoutCart,
+  createProduct,
+  deleteProductsWithNoImages,
+  fetchAll,
+  fetchByNameOrId,
+  getUserPurchaseHistory,
 }

@@ -1,29 +1,32 @@
-import mongoose, { Schema } from "mongoose";
-import { IUser } from "../../types";
+import mongoose, { Schema } from 'mongoose'
+import { IUser } from '../../types'
 
-const userSchema: Schema = new Schema({
+const userSchema: Schema = new Schema(
+  {
     username: {
-        type: String,
-        required: true,
-        unique: true
+      type: String,
+      required: true,
+      unique: true,
     },
     password: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
     email: {
-        type: String,
-        unique: true,
-        required: true
+      type: String,
+      unique: true,
+      required: true,
     },
     role: {
-        type: String,
-        enum: ['user', 'admin'],
-        default: 'user',
-        required: false
-    }
-}, {
-    timestamps: true
-});
+      type: String,
+      enum: ['user', 'admin'],
+      default: 'user',
+      required: false,
+    },
+  },
+  {
+    timestamps: true,
+  },
+)
 
-export default mongoose.model<IUser>('User', userSchema);
+export default mongoose.model<IUser>('User', userSchema)
