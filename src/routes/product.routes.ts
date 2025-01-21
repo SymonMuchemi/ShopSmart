@@ -13,12 +13,6 @@ const upload = multer({
 
 const productsRouter = Router();
 
-// productsRouter.post('/new', upload.array('files'), createProductSchema, asyncHandler(create));
-// productsRouter.get('/', asyncHandler(findAll));
-// productsRouter.put('/', asyncHandler(updateByName));
-// productsRouter.delete('/delete/:id', asyncHandler(deleteById));
-// productsRouter.delete('/delete', asyncHandler(deleteImageLess));
-
 productsRouter.route('/')
     .get(asyncHandler(findAll))
     .put(asyncHandler(updateByName))
