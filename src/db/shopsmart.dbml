@@ -30,8 +30,21 @@ Table Product {
 Table Cart {
     id integer [primary key]
     user_id integer
-    product_id integer
     quantity integer
+    total_amount float 
+    date_created timestamp
+    date_updated timestamp
+}
+
+Table CartItem {
+    id integer [primary key]
+    cart_id integer
+    product_id integer
+    product_name varchar
+    product_price float
+    image_url varchar
+    quantity integer
+    total_amount float
     date_created timestamp
     date_updated timestamp
 }
@@ -46,7 +59,8 @@ Table Purchase {
     date_updated timestamp
 }
 
-Ref: Cart.user_id > User.id // many-to-one
-Ref: Cart.product_id > Product.id // many-to-one
+Ref: Cart.user_id - User.id // one-to-one
+Ref: CartItem.cart_id > Cart.id // many-to-one
+Ref: CartItem.product_id > Product.id // many-to-one
 Ref: Purchase.user_id > User.id // many-to-one
 Ref: Purchase.product_id > Product.id // many-to-one

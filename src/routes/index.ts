@@ -1,3 +1,3 @@
-import authRouter from "./auth.routes";
+import authRouter from './auth.routes'
 
 export default { authRouter }

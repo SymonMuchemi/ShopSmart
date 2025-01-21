@@ -1,14 +1,34 @@
-import { Router } from "express";
-import { asyncHandler } from "../utils";
-import { createProductSchema } from "../middleware/validators/product.validator";
-import { authenticateToken, authorizeAdmin } from "../middleware/authToken.middleware";
-import { create, findAll, updateByName, deleteById } from "../controller/product.controller";
+import multer from 'multer'
+import { Router } from 'express'
+import { asyncHandler, errorHandler } from '../utils'
+import { createProductSchema } from '../middleware/validators/product.validator'
+import {
+  create,
+  findAll,
+  updateByName,
+  deleteById,
+  deleteImageLess,
+} from '../controller/product.controller'
 
-const productsRouter = Router();
+const storage = multer.memoryStorage()
+const upload = multer({
+  storage: storage,
+  limits: {
+    fileSize: 5 * 1024 * 1024,
+  },
+})
 
-productsRouter.post('/new', createProductSchema, asyncHandler(create));
-productsRouter.get('/', authenticateToken, authorizeAdmin, asyncHandler(findAll));
-productsRouter.put('/', authenticateToken, authorizeAdmin, asyncHandler(updateByName));
-productsRouter.delete('/delete/:id', asyncHandler(deleteById));
+const productsRouter = Router()
 
-export default productsRouter;
+productsRouter
+  .route('/')
+  .get(asyncHandler(findAll))
+  .put(asyncHandler(updateByName))
+  .delete(asyncHandler(deleteImageLess))
+productsRouter
+  .route('/new')
+  .post(upload.array('files'), createProductSchema, asyncHandler(create))
+productsRouter.route('/:id').delete(asyncHandler(deleteById))
+
+productsRouter.use(errorHandler)
+export default productsRouter

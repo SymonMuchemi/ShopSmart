@@ -1,1 +1,1 @@
-export const IMAGE_VIDEO_URL_REGEX = /^(http|https):\/\/[^ "]+$/;
+export const IMAGE_VIDEO_URL_REGEX = /^(http|https):\/\/[^ "]+$/
