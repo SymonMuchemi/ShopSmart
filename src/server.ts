@@ -10,6 +10,7 @@ import authRouter from './routes/auth.routes';
 import productsRouter from './routes/product.routes';
 import cartRouter from './routes/cart.routes';
 import purchaseRouter from './routes/purchase.routes';
+import paymentRouter from './routes/payments.routes';
 
 config();
 
@@ -27,6 +28,7 @@ app.use('/auth', authRouter);
 app.use('/cart', cartRouter);
 app.use('/products', productsRouter);
 app.use('/purchase', purchaseRouter);
+app.use('/', paymentRouter);
 
 // simple route
 app.get('/hello-world', (req: Request, res: Response) => {
