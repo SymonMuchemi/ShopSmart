@@ -3,6 +3,7 @@ import express, { Application, Request, Response } from 'express';
 import morgan from 'morgan';
 import { config } from 'dotenv';
 import { connectDB } from './db/conn';
+import { color } from 'console-log-colors';
 
 // TODO: Find shorter method to import and use all routes
 // import routes from './routes';
@@ -36,5 +37,5 @@ app.get('/hello-world', (req: Request, res: Response) => {
 });
 
 app.listen(PORT, () => {
-    console.log(`app is running on http://localhost:${PORT}`);
+    console.log(color.yellowBright.underline(`app is running on http://localhost:${PORT}`));
 });

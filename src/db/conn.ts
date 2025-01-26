@@ -1,3 +1,4 @@
+import { color } from 'console-log-colors';
 import mongoose from 'mongoose';
 
 export const connectDB = async () => {
@@ -11,8 +12,8 @@ export const connectDB = async () => {
 
         await mongoose.connect(DBUrl);
 
-        console.log("MongoDB Connected!");
+        console.log(color.blueBright("MongoDB Connected!"));
     } catch (error: any) {
-        console.log(`Mongodb connection error: ${error.toString()}`)
+        console.log(color.redBright(`Mongodb connection error: ${error.toString()}`))
     }
 }
