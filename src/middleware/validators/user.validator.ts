@@ -42,6 +42,12 @@ export const createUserSchema = checkSchema({
             errorMessage: 'role must be either "user" or "admin"'
         },
         optional: true
+    },
+    phone: {
+        in: ['body'],
+        isNumeric: {
+            errorMessage: 'Phone must be a number'
+        }
     }
 });
 

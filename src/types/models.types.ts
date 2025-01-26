@@ -5,6 +5,7 @@ export interface IUser extends Document {
     password: string;
     email: string;
     role: string | 'user' | 'admin';
+    phone: number;
 }
 
 export interface IProduct extends Document {

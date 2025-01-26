@@ -11,7 +11,7 @@ const INVALID_CREDENTIALS_ERROR = {
 
 export const createUser = async (user: IUser) => {
     try {
-        const { username, password, email, role } = user;
+        const { username, password, email, role, phone } = user;
         const existingUser = await User.findOne({ username });
 
         if (existingUser) {
@@ -27,7 +27,8 @@ export const createUser = async (user: IUser) => {
         const newUser = await User.create({
             username, email,
             password: hashedPassword,
-            role: role || 'user'
+            role: role || 'user',
+            phone
         });
 
         return {
