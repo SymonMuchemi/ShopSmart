@@ -4,6 +4,7 @@ import morgan from 'morgan';
 import { config } from 'dotenv';
 import { connectDB } from './db/conn';
 import { color } from 'console-log-colors';
+import { initializeNgrok } from './ngrok/init';
 
 // TODO: Find shorter method to import and use all routes
 // import routes from './routes';
@@ -19,6 +20,7 @@ const app: Application = express();
 const PORT: string | number = process.env.PORT || 3000;
 
 connectDB();
+initializeNgrok();
 
 app.use(morgan('dev'));
 app.use(express.json({ limit: "1mb" }));

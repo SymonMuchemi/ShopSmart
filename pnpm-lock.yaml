@@ -14,12 +14,18 @@ importers:
       '@aws-sdk/s3-request-presigner':
         specifier: ^3.717.0
         version: 3.717.0
+      '@ngrok/ngrok':
+        specifier: ^1.4.1
+        version: 1.4.1
       axios:
         specifier: ^1.7.9
         version: 1.7.9
       bcryptjs:
         specifier: ^2.4.3
         version: 2.4.3
+      console-log-colors:
+        specifier: ^0.5.0
+        version: 0.5.0
       cookie-parser:
         specifier: ^1.4.7
         version: 1.4.7
@@ -636,6 +642,87 @@ packages:
   '@mongodb-js/saslprep@1.1.9':
     resolution: {integrity: sha512-tVkljjeEaAhCqTzajSdgbQ6gE6f3oneVwa3iXR6csiEwXXOFsiC6Uh9iAjAhXPtqa/XMDHWjjeNH/77m/Yq2dw==}
 
+  '@ngrok/ngrok-android-arm-eabi@1.4.1':
+    resolution: {integrity: sha512-KQe59T8PhFg5XvWypcOCIgUakk/A9ipD1UvSgGuLI7pYIiVcx6oyW12RxCJr6cfdO0K5GrbUG6dlEXSmDD4jBg==}
+    engines: {node: '>= 10'}
+    cpu: [arm]
+    os: [android]
+
+  '@ngrok/ngrok-android-arm64@1.4.1':
+    resolution: {integrity: sha512-WPYJenabIArkGmeVhBcIVtgXmLK297pfJCYHP1Tnw220ANEXFdo7EW4dZoP0AA0gxciFHGYnQUMOn1Meo0IQFQ==}
+    engines: {node: '>= 10'}
+    cpu: [arm64]
+    os: [android]
+
+  '@ngrok/ngrok-darwin-arm64@1.4.1':
+    resolution: {integrity: sha512-hJW+ZDJ0uV7PieZAdZHdzR/WBRctjOkLzFqHTxSuNbmBr9uIg6PGf1dB2lySszK1wyKZL7wvh4GedQ4vSU5lkw==}
+    engines: {node: '>= 10'}
+    cpu: [arm64]
+    os: [darwin]
+
+  '@ngrok/ngrok-darwin-universal@1.4.1':
+    resolution: {integrity: sha512-rUZKl/vr2cALpT1Ng91h8Jf5OfDtF+zNEC65AFWthPkHJpPQCLvuEC9hyF8XI52Bv45ORRb1YKR3hdhjZ4WGHQ==}
+    engines: {node: '>= 10'}
+    os: [darwin]
+
+  '@ngrok/ngrok-darwin-x64@1.4.1':
+    resolution: {integrity: sha512-UKIkRpsGBywAqvwz8L6R8ITz+xxPoZ58LSFhZoMAWm2alGOdA2js1eHZwwVTSz96/tmmSRE/H+r69TvtuL0lXA==}
+    engines: {node: '>= 10'}
+    cpu: [x64]
+    os: [darwin]
+
+  '@ngrok/ngrok-freebsd-x64@1.4.1':
+    resolution: {integrity: sha512-v1xXqmu3f4W1PQt+NKlqXgLcpULYCSwStKGRSdgXljg1bRdOnW3ZdjbGzrIdKwQ7OcwZP34KbP13G+hqcTxo5Q==}
+    engines: {node: '>= 10'}
+    cpu: [x64]
+    os: [freebsd]
+
+  '@ngrok/ngrok-linux-arm-gnueabihf@1.4.1':
+    resolution: {integrity: sha512-yEeiVAGQNUErkSpOI1EZI+X3AkHCGd8yzqfjHamnhEONkwxLcWuTiUfcwFeMVtE9jyLfvQxctldPXXAjvaI/QA==}
+    engines: {node: '>= 10'}
+    cpu: [arm]
+    os: [linux]
+
+  '@ngrok/ngrok-linux-arm64-gnu@1.4.1':
+    resolution: {integrity: sha512-Fb2uju769eO/yOrWdbMvCXNczbXHnqNmN5TCYvqQbPdscFgrsNaJcVr2SmWOfBq+OcLWYbx6mXE1ki5yOZKU9w==}
+    engines: {node: '>= 10'}
+    cpu: [arm64]
+    os: [linux]
+
+  '@ngrok/ngrok-linux-arm64-musl@1.4.1':
+    resolution: {integrity: sha512-nMTTZkUnwCzeIVDkoUdNqBKe6ArYXRWGjC4iXinfPOdENkb/tZ/eAjVdg+8bQ5PJgl/n/TbdZKNj//Jz2x8fdw==}
+    engines: {node: '>= 10'}
+    cpu: [arm64]
+    os: [linux]
+
+  '@ngrok/ngrok-linux-x64-gnu@1.4.1':
+    resolution: {integrity: sha512-IfDaYd9ZGk7F0szHql5Tr3rlLBlhuKbbNXDVkujGy/njA4/YnckfsZilGEtgnR7aYgHo3NqppfEw+AOmlDytCw==}
+    engines: {node: '>= 10'}
+    cpu: [x64]
+    os: [linux]
+
+  '@ngrok/ngrok-linux-x64-musl@1.4.1':
+    resolution: {integrity: sha512-Ze6wb2umg6hfJhxOrFQhiyIZOf9YjSRkefnaQdAaONrIKxiFsu5SIKQbp7MQRnm8wabB9i0OI0Q/TVBsxo/HLw==}
+    engines: {node: '>= 10'}
+    cpu: [x64]
+    os: [linux]
+
+  '@ngrok/ngrok-win32-ia32-msvc@1.4.1':
+    resolution: {integrity: sha512-FV3dwGpbh1h2fJ7h+Od8vFRrR9RxqBUAI+ELxQxropDxwYp6rWGKFnfE+JUcT79fEH3OpA0ElULrIDrLgK7bgg==}
+    engines: {node: '>= 10'}
+    cpu: [ia32]
+    os: [win32]
+
+  '@ngrok/ngrok-win32-x64-msvc@1.4.1':
+    resolution: {integrity: sha512-Zr1Dyel4M3cA1kjT/N5ftTiCdoPnVv/VbyE6AKKemP9DDFkTlpdvMwSXikm/ypNtCNFEs/+q8CBZPhhaKktl8A==}
+    engines: {node: '>= 10'}
+    cpu: [x64]
+    os: [win32]
+
+  '@ngrok/ngrok@1.4.1':
+    resolution: {integrity: sha512-KZ7/T4UOY3BqJBdweJPeebKW34YzIH+a2y4o7yqTIowoi6dw3sMj140o1Q8FvpPbH5J6lr2TWVCWdgSTYvHNgw==}
+    engines: {node: '>= 10'}
+
   '@sinclair/typebox@0.27.8':
     resolution: {integrity: sha512-+Fj43pSMwJs4KRrH/938Uf+uAELIgVBmQzg/q1YG10djyfA3TnrU8N8XzqCh/okZdszqBQTZf96idMfE5lnwTA==}
 
@@ -1169,6 +1256,10 @@ packages:
   concat-stream@1.6.2:
     resolution: {integrity: sha512-27HBghJxjiZtIk3Ycvn/4kbJk/1uZuJFfuPEns6LaEvpvG1f0hTea8lilrouyo9mVc2GWdcEZ8OLoGmSADlrCw==}
     engines: {'0': node >= 0.8}
+
+  console-log-colors@0.5.0:
+    resolution: {integrity: sha512-ixjGY06zMLCnNXeBdDKL6GuS1+/yQ1GorbZ9YsptP6jDgLqk/bBdQ5cTQvVveKUbO8Th6zwIhY8yRwhrpjXk6g==}
+    engines: {node: '>= 4.1.0'}
 
   content-disposition@0.5.4:
     resolution: {integrity: sha512-FveZTNuGw04cxlAiWbzi6zTAL/lhehaWbTtgluJh4/E95DqMwTmha3KZN1aAWA8cFIhHzMZUvLevkw5Rqk+tSQ==}
@@ -3427,6 +3518,61 @@ snapshots:
     dependencies:
       sparse-bitfield: 3.0.3
 
+  '@ngrok/ngrok-android-arm-eabi@1.4.1':
+    optional: true
+
+  '@ngrok/ngrok-android-arm64@1.4.1':
+    optional: true
+
+  '@ngrok/ngrok-darwin-arm64@1.4.1':
+    optional: true
+
+  '@ngrok/ngrok-darwin-universal@1.4.1':
+    optional: true
+
+  '@ngrok/ngrok-darwin-x64@1.4.1':
+    optional: true
+
+  '@ngrok/ngrok-freebsd-x64@1.4.1':
+    optional: true
+
+  '@ngrok/ngrok-linux-arm-gnueabihf@1.4.1':
+    optional: true
+
+  '@ngrok/ngrok-linux-arm64-gnu@1.4.1':
+    optional: true
+
+  '@ngrok/ngrok-linux-arm64-musl@1.4.1':
+    optional: true
+
+  '@ngrok/ngrok-linux-x64-gnu@1.4.1':
+    optional: true
+
+  '@ngrok/ngrok-linux-x64-musl@1.4.1':
+    optional: true
+
+  '@ngrok/ngrok-win32-ia32-msvc@1.4.1':
+    optional: true
+
+  '@ngrok/ngrok-win32-x64-msvc@1.4.1':
+    optional: true
+
+  '@ngrok/ngrok@1.4.1':
+    optionalDependencies:
+      '@ngrok/ngrok-android-arm-eabi': 1.4.1
+      '@ngrok/ngrok-android-arm64': 1.4.1
+      '@ngrok/ngrok-darwin-arm64': 1.4.1
+      '@ngrok/ngrok-darwin-universal': 1.4.1
+      '@ngrok/ngrok-darwin-x64': 1.4.1
+      '@ngrok/ngrok-freebsd-x64': 1.4.1
+      '@ngrok/ngrok-linux-arm-gnueabihf': 1.4.1
+      '@ngrok/ngrok-linux-arm64-gnu': 1.4.1
+      '@ngrok/ngrok-linux-arm64-musl': 1.4.1
+      '@ngrok/ngrok-linux-x64-gnu': 1.4.1
+      '@ngrok/ngrok-linux-x64-musl': 1.4.1
+      '@ngrok/ngrok-win32-ia32-msvc': 1.4.1
+      '@ngrok/ngrok-win32-x64-msvc': 1.4.1
+
   '@sinclair/typebox@0.27.8': {}
 
   '@sinonjs/commons@3.0.1':
@@ -4147,6 +4293,8 @@ snapshots:
       inherits: 2.0.4
       readable-stream: 2.3.8
       typedarray: 0.0.6
+
+  console-log-colors@0.5.0: {}
 
   content-disposition@0.5.4:
     dependencies:
