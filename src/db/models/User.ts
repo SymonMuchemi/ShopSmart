@@ -21,6 +21,10 @@ const userSchema: Schema = new Schema({
         enum: ['user', 'admin'],
         default: 'user',
         required: false
+    },
+    phone: {
+        type: Number,
+        required: true
     }
 }, {
     timestamps: true
