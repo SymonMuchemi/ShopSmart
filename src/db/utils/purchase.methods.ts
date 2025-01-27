@@ -1,5 +1,7 @@
 import { PurchaseItem } from '../../types/models.types';
 import { Product, Purchase, User, Cart, CartITem } from '../models';
+import { makePurchase } from '../../mpesa/makePurchase';
+import { color } from "console-log-colors";
 
 const enrichedPurchaseItems = async (purchaseItems: PurchaseItem[]) => {
     try {
@@ -118,6 +120,9 @@ export const checkoutCart = async (userId: string) => {
         if (!purchaseRecord) {
             throw new Error("Could not make purchase");
         }
+
+        console.log(color.magenta.bold('Making purchase'));
+        const makePurchaseResponse = await makePurchase(userId, purchaseRecord.id);
 
         await clearUserCart(userId);
 
