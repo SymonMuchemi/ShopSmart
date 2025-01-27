@@ -84,13 +84,6 @@ A robust RESTful API for e-commerce operations built with Node.js and MongoDB.
 
 6. Access the application on `http://localhost:3000`.
 
-## API Documentation
-
-The API documentation will be available at `http://localhost:3000/api-docs`.
-
-## License
-
-This project is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 
 ## Author
 
