@@ -9,6 +9,7 @@ Table User {
     password varchar
     email varchar
     role Roles [default: 'user']
+    phone integer
     date_created timestamp
     date_updated timestamp
 }
