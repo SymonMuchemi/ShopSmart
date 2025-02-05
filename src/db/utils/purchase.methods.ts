@@ -155,7 +155,7 @@ const getPaymentResponse =  async (cardDetails: CardDetails, amount: number) => 
             paymentURL,
             {
                 ...cardDetails,
-                amount: amount * 100
+                amount: amount * 100 // multiply to convert amount to dollar from cents
             }
         );
 
