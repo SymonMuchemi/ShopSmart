@@ -3,6 +3,11 @@ Enum Roles {
     user
 }
 
+Enum PaymentStatus {
+    PAID
+    FAILED
+}
+
 Table User {
     id integer
     username varchar
@@ -56,6 +61,7 @@ Table Purchase {
     product_id integer
     quantity integer
     amount float
+    status PaymentStatus [default: 'PAID']
     date_created timestamp
     date_updated timestamp
 }

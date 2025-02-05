@@ -16,7 +16,7 @@ A robust RESTful API for e-commerce operations built with Node.js and MongoDB.
 - [x] image storage
 - [x] Shopping Cart Operations
 - [x] Purchase Management
-- [x] MPesa Payment Integration
+- [x] Stripe Payment Integration
 
 ## Technologies
 
@@ -28,7 +28,7 @@ A robust RESTful API for e-commerce operations built with Node.js and MongoDB.
 - [MongoDB](https://www.mongodb.com/): NoSQL database.
 - [Mongoose](https://mongoosejs.com/): Object Relational Mapper for MongoDB.
 - [JWT](https://jwt.io/): Secure user authentication.
-- [MPesa](https://developer.safaricom.co.ke/): mobile payment gateway.
+- [Stripe](https://stripe.com/docs): Payment processing platform.
 - [Swagger](https://swagger.io/): API documentation.
 - [Jest](https://jestjs.io/): Testing framework.
 
