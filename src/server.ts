@@ -4,8 +4,7 @@ import morgan from 'morgan';
 import { config } from 'dotenv';
 import { connectDB } from './db/conn';
 
-// TODO: Find shorter method to import and use all routes
-// import routes from './routes';
+// Import routers
 import authRouter from './routes/auth.routes';
 import productsRouter from './routes/product.routes';
 import cartRouter from './routes/cart.routes';
