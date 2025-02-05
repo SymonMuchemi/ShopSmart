@@ -29,8 +29,10 @@ A robust RESTful API for e-commerce operations built with Node.js and MongoDB.
 - [Mongoose](https://mongoosejs.com/): Object Relational Mapper for MongoDB.
 - [JWT](https://jwt.io/): Secure user authentication.
 - [Stripe](https://stripe.com/docs): Payment processing platform.
-- [Swagger](https://swagger.io/): API documentation.
-- [Jest](https://jestjs.io/): Testing framework.
+
+## Database Design
+
+![database Design](/src/db/db%20design.png)
 
 ## Installation
 
