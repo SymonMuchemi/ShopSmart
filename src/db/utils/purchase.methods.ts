@@ -1,7 +1,16 @@
-import { PurchaseItem } from '../../types/models.types';
+import axios from 'axios';
+import { config } from 'dotenv';
+import { PurchaseItem, CardDetails } from '../../types/models.types';
 import { Product, Purchase, User, Cart, CartITem } from '../models';
 import { makePurchase } from '../../mpesa/makePurchase';
 import { color } from "console-log-colors";
+
+config();
+
+const paymentURL: string = `http://localhost:${process.env.PORT}/api/v1/process-payment`
+
+console.log(paymentURL);
+
 
 const enrichedPurchaseItems = async (purchaseItems: PurchaseItem[]) => {
     try {
@@ -83,7 +92,7 @@ export const markPurchaseAsPaidOrDeclined = async (purchaseId: string, status: '
     }
 }
 
-export const checkoutCart = async (userId: string) => {
+export const checkoutCart = async (userId: string, cardDetails: CardDetails) => {
     try {
         const userCart = await Cart.findOne({ user: userId });
 
@@ -111,10 +120,17 @@ export const checkoutCart = async (userId: string) => {
             purchaseItems.push(purchaseItem)
         }
 
+        const paymentStatus = await getPaymentResponse(cardDetails, grand_total);
+
+        if (paymentStatus !== 200) {
+            throw new Error('Could not make payment!');
+        }
+
         const purchaseRecord = await Purchase.create({
             user: userId,
             items: purchaseItems,
-            total_amount: grand_total
+            total_amount: grand_total,
+            status: 'paid'
         })
 
         if (!purchaseRecord) {
@@ -129,6 +145,29 @@ export const checkoutCart = async (userId: string) => {
         return purchaseRecord;
     } catch (error: any) {
         throw new Error(error.toString());
+    }
+}
+
+const getPaymentResponse =  async (cardDetails: CardDetails, amount: number) => {
+    try {
+        const body = {
+            ...cardDetails,
+            amount
+        }
+
+        console.log(`Payment details: ${JSON.stringify(body)}`);
+        const response = await axios.post(
+            paymentURL,
+            {
+                ...cardDetails,
+                amount: amount * 100 // multiply to convert amount to dollar from cents
+            }
+        );
+
+        return response.status;
+    } catch (error: any) {
+        console.log(`Error making payment: ${error.toString()}`);
+        return 500;
     }
 }
 

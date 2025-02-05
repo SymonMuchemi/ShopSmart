@@ -1,5 +1,5 @@
 import { ReturnResponse } from "../types";
-import { PurchaseItem } from "../types/models.types";
+import { CardDetails, PurchaseItem } from "../types/models.types";
 import { checkoutCart, recordPurchase, getUserPurchaseHistory } from "../db/utils";
 
 
@@ -29,9 +29,9 @@ export const makePurchase = async (userId: string, purchaseItems: PurchaseItem[]
     }
 }
 
-export const purchaseUsingCart = async (userId: string) => {
+export const purchaseUsingCart = async (userId: string, cardDetails: CardDetails) => {
     try {
-        const cartItems = await checkoutCart(userId);
+        const cartItems = await checkoutCart(userId, cardDetails);
 
         return {
             code: 200,

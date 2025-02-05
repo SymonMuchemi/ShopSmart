@@ -50,5 +50,13 @@ export interface IPurchase {
     status: 'paid' | 'declined'
 }
 
+export interface CardDetails {
+    cardNumber: string;
+    exp_month: number;
+    exp_year: number;
+    cvc: string;
+    currency?: string;
+}
+
 export type AuthUser = Pick<IUser, 'email' | 'password'>
 export type UpdateProduct = Partial<IProduct>;

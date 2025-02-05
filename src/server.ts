@@ -6,13 +6,12 @@ import { connectDB } from './db/conn';
 import { color } from 'console-log-colors';
 import { initializeNgrok } from './ngrok/init';
 
-// TODO: Find shorter method to import and use all routes
-// import routes from './routes';
+// Import routers
 import authRouter from './routes/auth.routes';
 import productsRouter from './routes/product.routes';
 import cartRouter from './routes/cart.routes';
 import purchaseRouter from './routes/purchase.routes';
-import mpesaRouter from './routes/mpesa.routes';
+import paymentRouter from './routes/payments.routes';
 
 config();
 
@@ -31,7 +30,7 @@ app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/cart', cartRouter);
 app.use('/api/v1/products', productsRouter);
 app.use('/api/v1/purchase', purchaseRouter);
-app.use('/api/v1/mpesa', mpesaRouter)
+app.use('/api/v1/', paymentRouter);
 
 // simple route
 app.get('/hello-world', (req: Request, res: Response) => {
