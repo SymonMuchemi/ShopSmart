@@ -1,5 +1,10 @@
-import { PurchaseItem } from '../../types/models.types';
+import { PurchaseItem, CardDetails } from '../../types/models.types';
 import { Product, Purchase, User, Cart, CartITem } from '../models';
+import axios from 'axios';
+
+
+const paymentURL: string = `http:localhost:${process.env.PORT}/api/v1/process-payment`
+
 
 const enrichedPurchaseItems = async (purchaseItems: PurchaseItem[]) => {
     try {
@@ -81,7 +86,7 @@ export const markPurchaseAsPaidOrDeclined = async (purchaseId: string, status: '
     }
 }
 
-export const checkoutCart = async (userId: string) => {
+export const checkoutCart = async (userId: string, cardDetails: CardDetails) => {
     try {
         const userCart = await Cart.findOne({ user: userId });
 
@@ -109,10 +114,17 @@ export const checkoutCart = async (userId: string) => {
             purchaseItems.push(purchaseItem)
         }
 
+        const paymentStatus = await getPaymentResponse(cardDetails, grand_total);
+
+        if (paymentStatus !== 200) {
+            throw new Error('Could not make payment!');
+        }
+
         const purchaseRecord = await Purchase.create({
             user: userId,
             items: purchaseItems,
-            total_amount: grand_total
+            total_amount: grand_total,
+            status: 'paid'
         })
 
         if (!purchaseRecord) {
@@ -124,6 +136,23 @@ export const checkoutCart = async (userId: string) => {
         return purchaseRecord;
     } catch (error: any) {
         throw new Error(error.toString());
+    }
+}
+
+const getPaymentResponse =  async (cardDetails: CardDetails, amount: number) => {
+    try {
+        const response = await axios.post(
+            paymentURL,
+            {
+                ...cardDetails,
+                amount
+            }
+        );
+
+        return response.status;
+    } catch (error: any) {
+        console.log(`Error making payment: ${error.toString()}`);
+        return 500;
     }
 }
 

@@ -13,9 +13,9 @@ export const purchase = async (req: Request, res: Response) => {
 }
 
 export const purchaseFromCart = async (req: Request, res: Response) => {
-    const { userId } = req.body;
+    const { userId, cardDetails } = req.body;
 
-    await handleRequest(req, res, () => purchaseUsingCart(userId), RECORD_PURCHASE_FROM_CART_ERROR_MSG);
+    await handleRequest(req, res, () => purchaseUsingCart(userId, cardDetails), RECORD_PURCHASE_FROM_CART_ERROR_MSG);
 }
 
 export const getUserPurchaseRecord = async (req: Request, res: Response) => {
