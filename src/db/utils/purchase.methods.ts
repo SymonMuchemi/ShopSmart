@@ -1,9 +1,13 @@
+import axios from 'axios';
+import { config } from 'dotenv';
 import { PurchaseItem, CardDetails } from '../../types/models.types';
 import { Product, Purchase, User, Cart, CartITem } from '../models';
-import axios from 'axios';
 
+config();
 
-const paymentURL: string = `http:localhost:${process.env.PORT}/api/v1/process-payment`
+const paymentURL: string = `http://localhost:${process.env.PORT}/api/v1/process-payment`
+
+console.log(paymentURL);
 
 
 const enrichedPurchaseItems = async (purchaseItems: PurchaseItem[]) => {
@@ -141,11 +145,17 @@ export const checkoutCart = async (userId: string, cardDetails: CardDetails) => 
 
 const getPaymentResponse =  async (cardDetails: CardDetails, amount: number) => {
     try {
+        const body = {
+            ...cardDetails,
+            amount
+        }
+
+        console.log(`Payment details: ${JSON.stringify(body)}`);
         const response = await axios.post(
             paymentURL,
             {
                 ...cardDetails,
-                amount
+                amount: amount * 100
             }
         );
 
