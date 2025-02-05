@@ -5,15 +5,19 @@ import { color } from "console-log-colors";
 import { timestamp } from "../mpesa/timeStamps";
 import { getNgrokUrl } from "../ngrok/init";
 
+const BUSINESS_SHORT_CODE = process.env.MPESA_BUSINESS_SHORT_CODE as string;
+const MPESA_PASS_KEY = process.env.MPESA_PASS_KEY;
+
+const generate_stk_password = () => {
+  return Buffer.from(
+    BUSINESS_SHORT_CODE + MPESA_PASS_KEY + timestamp
+  ).toString('base64');
+}
+
 const handleStkPush = async (req: RequestExtended, res: Response) => {
   const { phone, amount } = req.body;
 
-  const BUSINESS_SHORT_CODE = process.env.MPESA_BUSINESS_SHORT_CODE as string;
-
-  const password = Buffer.from(
-    BUSINESS_SHORT_CODE + process.env.MPESA_PASS_KEY + timestamp
-  ).toString("base64");
-
+  const password = generate_stk_password();
   const ngrokUrl = getNgrokUrl();
   const callbackUrl = `${ngrokUrl}/api/v1/mpesa/callback`;
 
@@ -65,31 +69,22 @@ const handleCallback = async (req: RequestExtended, res: Response) => {
 };
 
 const confirmPaymentStatus = async (req: RequestExtended, res: Response) => {
-  const { transactionId } = req.body; // Mpesa Receipt Number
-  const BUSINESS_SHORT_CODE = process.env.MPESA_BUSINESS_SHORT_CODE as string;
-  const INITIATOR_NAME = process.env.MPESA_INITIATOR_NAME as string;
-  const SECURITY_CREDENTIAL = process.env.MPESA_SECURITY_CREDENTIAL as string; // Encrypted password
-
-  const ngrokUrl = getNgrokUrl();
-  const resultUrl = `${ngrokUrl}/api/v1/mpesa/transaction-status-callback`;
-  const timeoutUrl = `${ngrokUrl}/api/v1/mpesa/timeout`;
+  const { CheckoutRequestID } = req.body;
 
   const payload = {
-    Initiator: INITIATOR_NAME,
-    SecurityCredential: SECURITY_CREDENTIAL,
-    CommandID: "TransactionStatusQuery",
-    TransactionID: transactionId,
-    PartyA: BUSINESS_SHORT_CODE,
-    IdentifierType: 4,
-    ResultURL: resultUrl,
-    QueueTimeOutURL: timeoutUrl,
-    Remarks: "Payment confirmation",
-    Occasion: "Payment",
-  };
+    BusinessShortCode: BUSINESS_SHORT_CODE,
+    Password: generate_stk_password(),
+    Timestamp: timestamp,
+    CheckoutRequestID
+  }
+
+  // setTimeout(() => {
+  //   console.log('Waiting before sending payment confirmation request!');
+  // }, 15000);
 
   try {
     const response = await axios.post(
-      "https://sandbox.safaricom.co.ke/mpesa/transactionstatus/v1/query",
+      "https://sandbox.safaricom.co.ke/mpesa/stkpushquery/v1/query",
       payload,
       {
         headers: {
@@ -98,13 +93,15 @@ const confirmPaymentStatus = async (req: RequestExtended, res: Response) => {
       }
     );
 
+    console.log(color.red.bg1(`Response from confirm_status: ${response}`))
+
     res.status(200).json({
       message: "Transaction status query initiated successfully",
       data: response.data,
     });
   } catch (error: any) {
     console.log(color.yellow.bold('Error on confirming payment status'))
-    console.log(color.red(error.response.data.data));
+    console.log(color.red(`Error message ${error}`));
 
     res.status(500).json({
       message: "Transaction status query failed",

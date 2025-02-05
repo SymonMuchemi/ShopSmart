@@ -34,6 +34,7 @@ export const makePurchase = async (userId: string, purchaseId: string) => {
 
         const confirmPayResponse = await axios.post(confirmPayUrl, { CheckoutRequestID });
 
+
         console.log(color.yellow("Confirming pay!"));
         console.log(color.blue.bold(confirmPayResponse));
 

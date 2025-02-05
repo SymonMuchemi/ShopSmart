@@ -19,7 +19,7 @@ export const purchaseFromCart = async (req: Request, res: Response) => {
 }
 
 export const getUserPurchaseRecord = async (req: Request, res: Response) => {
-    const userId = req.query.userId as string;
+    const userId = req.params.userId as string;
     const page = Number.parseInt(req.query.page as string) || 1;
     const limit = Number.parseInt(req.query.limit as string) || 10;
 

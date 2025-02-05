@@ -214,7 +214,7 @@ export const getUserPurchaseHistory = async (userId: string, page: number = 1, l
 
         const userPurchases = await Purchase.find({ user: userId }).skip(skip).limit(limit);
 
-        const total_items = await Purchase.countDocuments();
+        const total_items = userPurchases.length;
         const total_pages = Math.ceil(total_items / limit);
 
         console.log({ userId, page, limit });
