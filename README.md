@@ -67,11 +67,6 @@ A robust RESTful API for e-commerce operations built with Node.js and MongoDB.
     STRIPE_PUBLISHABLE_KEY=your_stripe_publishable_key
     STRIPE_SECRET_KEY=your_stripe_secret_key
 
-    MPESA_CONSUMER_KEY=your_mpesa_consumer_key
-    MPESA_CONSUMER_SECRET=your_mpesa_consumer_secret
-    MPESA_SHORTCODE=your_mpesa_shortcode
-    MPESA_PASSKEY=your_mpesa_passkey
-
     S3_BUCKET_REGION='your_s3_bucket_region'
     S3_BUCKET_NAME='your_s3_bucket_name'
     S3_ACCESS_KEY='your_s3_access_key_id'
