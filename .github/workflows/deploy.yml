@@ -1,0 +1,32 @@
+name: Deploy to AWS EC2 Server
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Clone repository
+        run: |
+          git clone {{ REPO_URL}}
+      
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Docker
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker.io
+
+      - name: Build Docker image
+        run: |
+          cd ~/ShopSmart
+          git pull origin main
+          sudo docker stop shopsmart || true
+          sudo docker rm shopsmart || true
+          sudo docker build -t shopsmart .
+          sudo docker run -d -p 3000:3000 shopsmart shopsmart
