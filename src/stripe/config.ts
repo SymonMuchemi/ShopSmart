@@ -1,9 +1,14 @@
 import Stripe from 'stripe';
+import { getAwsSecrets } from '../config/secrets';
+import { color } from 'console-log-colors';
 
-const STRIPE_SECRET_KEY: string | undefined = process.env.STRIPE_SECRET_KEY;
+export const initStripe = async () => {
+    try {
+        const { STRIPE_SECRET_KEY } = await getAwsSecrets();
 
-if (STRIPE_SECRET_KEY === undefined) {
-    throw new Error('Stripe: secret key not defined!')
-} 
+        return new Stripe(STRIPE_SECRET_KEY);
 
-export const stripe = new Stripe(STRIPE_SECRET_KEY);
+    } catch (error: any) {
+        console.error(color.red.bold(`Stripe initialization error: ${error.message}`));
+    }
+}

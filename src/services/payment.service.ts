@@ -1,5 +1,5 @@
 import { createIntent } from "../stripe/utils";
-import { stripe } from "../stripe/config";
+import { initStripe } from "../stripe/config";
 
 interface PaymentRequest {
     cardNumber: string;
@@ -34,6 +34,10 @@ export const makeIntent = async (amount: number) => {
 export const processPayment = async (paymentData: PaymentRequest) => {
     try {
         const { cardNumber, exp_month, exp_year, cvc, amount, currency } = paymentData;
+
+        const stripe = await initStripe();
+
+        if (!stripe) throw new Error('Stripe object not created');
 
         const paymentMethod = await stripe.paymentMethods.create({
             type: 'card',

@@ -21,11 +21,9 @@ export const connectDB = async () => {
             console.log(color.red.inverse('MONGO DB URL NOT FOUND IN SECRET!!!'))
         }
 
-        console.log(`Mongo db url string: ${MONGO_DB_URL}`)
-
         const conn = await mongoose.connect(MONGO_DB_URL);
 
-        console.log(color.blueBright(`MongoDB connected: ${conn.connection.host}`));
+        console.log(color.blueBright(`MongoDB connected: ${conn.connection.host}:${conn.connection.port}`));
     } catch (error: any) {
         console.log(color.redBright(`Mongodb connection error: ${error.toString()}`))
     }
