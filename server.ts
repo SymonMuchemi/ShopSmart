@@ -2,15 +2,15 @@ import cookieParser from 'cookie-parser';
 import express, { Application, Request, Response } from 'express';
 import morgan from 'morgan';
 import { config } from 'dotenv';
-import { connectDB } from './db/conn';
+import { connectDB } from './src/db/conn';
 import { color } from 'console-log-colors';
 
 // Import routers
-import authRouter from './routes/auth.routes';
-import productsRouter from './routes/product.routes';
-import cartRouter from './routes/cart.routes';
-import purchaseRouter from './routes/purchase.routes';
-import paymentRouter from './routes/payments.routes';
+import authRouter from './src/routes/auth.routes';
+import productsRouter from './src/routes/product.routes';
+import cartRouter from './src/routes/cart.routes';
+import purchaseRouter from './src/routes/purchase.routes';
+import paymentRouter from './src/routes/payments.routes';
 
 config();
 
