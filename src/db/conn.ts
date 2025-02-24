@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { getAwsSecrets } from '../config/secrets';
 import { SecretsManagerClient, GetSecretValueCommand } from '@aws-sdk/client-secrets-manager';
 
 import { color } from 'console-log-colors';
@@ -13,27 +14,14 @@ let response;
 export const connectDB = async () => {
     try {
         // fetch MongoDB URI from AWS Secrets Manager
-        response = await client.send(
-            new GetSecretValueCommand({
-                SecretId: secret_name,
-                VersionStage: 'AWSCURRENT'
-            })
-        );
 
-        const secret = response.SecretString;
-
-        console.log(color.yellowBright(secret))
-
-        if (!secret) {
-            console.log(color.red.inverse("SecretString is empty!!!"));
-            process.exit(1);
-        }
-
-        const { MONGO_DB_URL } = JSON.parse(secret);
+        const { MONGO_DB_URL } = await getAwsSecrets();
 
         if (!MONGO_DB_URL) {
             console.log(color.red.inverse('MONGO DB URL NOT FOUND IN SECRET!!!'))
         }
+
+        console.log(`Mongo db url string: ${MONGO_DB_URL}`)
 
         const conn = await mongoose.connect(MONGO_DB_URL);
 

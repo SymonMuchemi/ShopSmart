@@ -1,8 +1,10 @@
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import { s3Client, bucketName } from "./client";
+import { initS3Client } from "./client";
 import { GetObjectCommand, PutObjectCommand, DeleteObjectCommand, BucketAccelerateStatus } from "@aws-sdk/client-s3";
 
 export const uploadImageToS3 = async (fileBuffer: Buffer, fileName: string, mimeType: string): Promise<void> => {
+    const { s3Client, bucketName } = await initS3Client();
+
     const uploadParams = {
         Bucket: bucketName,
         Body: fileBuffer,
@@ -15,6 +17,8 @@ export const uploadImageToS3 = async (fileBuffer: Buffer, fileName: string, mime
 
 export const getObjectSignedUrl = async (key: string) => {
     try {
+        const { s3Client, bucketName } = await initS3Client();
+
         const params = {
             Bucket: bucketName,
             Key: key,
@@ -32,6 +36,8 @@ export const getObjectSignedUrl = async (key: string) => {
 
 export const deleteImageFromBucket = async (imageName: string) => {
     try {
+        const { s3Client, bucketName } = await initS3Client();
+
         const params = {
             Bucket: bucketName,
             Key: imageName
