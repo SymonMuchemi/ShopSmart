@@ -5,12 +5,7 @@ import { Product, Purchase, User, Cart, CartITem } from '../models';
 import { makePurchase } from '../../mpesa/makePurchase';
 import { color } from "console-log-colors";
 
-config();
-
-const paymentURL: string = `http://localhost:${process.env.PORT}/api/v1/process-payment`
-
-console.log(paymentURL);
-
+const paymentURL: string = `http://localhost:${process.env.PORT}/api/v1/process-payment`;
 
 const enrichedPurchaseItems = async (purchaseItems: PurchaseItem[]) => {
     try {

@@ -1,7 +1,7 @@
 import { S3Client } from '@aws-sdk/client-s3';
 import { config } from 'dotenv';
 
-config();
+config({ path: './config/config.env' });
 
 const bucketName = process.env.S3_BUCKET_NAME;
 const region = process.env.S3_BUCKET_REGION;
