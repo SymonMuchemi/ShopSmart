@@ -1,7 +1,6 @@
 import cookieParser from 'cookie-parser';
 import express, { Application, Request, Response } from 'express';
 import morgan from 'morgan';
-import { config } from 'dotenv';
 import { connectDB } from './src/db/conn';
 import { color } from 'console-log-colors';
 
@@ -12,10 +11,8 @@ import cartRouter from './src/routes/cart.routes';
 import purchaseRouter from './src/routes/purchase.routes';
 import paymentRouter from './src/routes/payments.routes';
 
-config();
-
 const app: Application = express();
-const PORT: string | number = process.env.PORT || 3000;
+const PORT: number = 3000;
 
 connectDB();
 

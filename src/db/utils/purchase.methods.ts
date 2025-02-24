@@ -1,11 +1,9 @@
 import axios from 'axios';
-import { config } from 'dotenv';
 import { PurchaseItem, CardDetails } from '../../types/models.types';
 import { Product, Purchase, User, Cart, CartITem } from '../models';
 import { makePurchase } from '../../mpesa/makePurchase';
 import { color } from "console-log-colors";
-
-const paymentURL: string = `http://localhost:${process.env.PORT}/api/v1/process-payment`;
+import { getAwsSecrets } from '../../config/secrets';
 
 const enrichedPurchaseItems = async (purchaseItems: PurchaseItem[]) => {
     try {
@@ -145,6 +143,10 @@ export const checkoutCart = async (userId: string, cardDetails: CardDetails) => 
 
 const getPaymentResponse =  async (cardDetails: CardDetails, amount: number) => {
     try {
+        const { PORT } = await getAwsSecrets();
+
+        const paymentURL: string = `http://localhost:${process.env.PORT}/api/v1/process-payment`;
+
         const body = {
             ...cardDetails,
             amount
