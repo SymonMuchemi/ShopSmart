@@ -1,6 +1,5 @@
 node_modules/
-.env
+**.env
 .idea/
 .vscode
-config/config.env
 secrets.json
