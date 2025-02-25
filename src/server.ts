@@ -29,10 +29,16 @@ app.use('/api/v1/purchase', purchaseRouter);
 app.use('/api/v1/', paymentRouter);
 
 // simple route
-app.get('/hello-world', (req: Request, res: Response) => {
+app.get('/api/v1/hello-world', (req: Request, res: Response) => {
     res.send("Hello from smartshop");
 });
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
     console.log(color.yellowBright.underline(`app is running on http://localhost:${PORT}`));
+});
+
+process.on('unhandledRejection', (err: any, promise) => {
+    console.log(`Error: ${err.message}`);
+
+    server.close(() => process.exit(1));
 });
