@@ -7,7 +7,7 @@
     "test": "jest --watchAll",
     "build": "ts-node-dev --poll ./src/server.ts",
     "start": "node dist/server.js",
-    "dev": "nodemon ./server.ts"
+    "dev": "nodemon ./src/server.ts"
   },
   "keywords": [],
   "author": "",

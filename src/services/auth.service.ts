@@ -2,6 +2,8 @@ import User from "../db/models/User";
 import bcrypt from 'bcryptjs';
 import jwt from "jsonwebtoken";
 import { IUser, AuthUser } from "../types";
+import { getAwsSecrets } from "../config/secrets";
+import { color } from 'console-log-colors';
 
 const INVALID_CREDENTIALS_ERROR = {
     code: 400,
@@ -63,10 +65,13 @@ export const authenticateUser = async (user: AuthUser) => {
             return INVALID_CREDENTIALS_ERROR;
         }
 
-        const jwtSecret: string | undefined = process.env.JWT_SECRET;
-        const jwtExpiration: string | undefined = process.env.JWT_EXPIRATION;
+        const { JWT_SECRET, JWT_EXPIRATION } = await getAwsSecrets();
+        const jwtSecret = JWT_SECRET;
+        const jwtExpiration = JWT_EXPIRATION;
 
-        if (!jwtExpiration || !jwtSecret) {
+        console.log(color.cyan.bold(`Secret: ${jwtSecret}\nExpiration: ${jwtExpiration}`))
+
+        if (!jwtExpiration || !jwtSecret || jwtSecret === null || jwtExpiration === null) {
             console.log('Missing jwt secret or expiration!');
 
             return {
