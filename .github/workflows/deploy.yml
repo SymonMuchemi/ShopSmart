@@ -8,11 +8,13 @@ on:
 jobs:
   deploy:
     runs-on: self-hosted
+    env:
+      REPO_URL: https://github.com/SymonMuchemi/ShopSmart
 
     steps:
       - name: Clone repository
         run: |
-          git clone {{ REPO_URL}}
+          git clone ${{ env.REPO_URL}} || true
       
       - name: Checkout repository
         uses: actions/checkout@v3
