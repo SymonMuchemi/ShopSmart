@@ -31,4 +31,4 @@ jobs:
           sudo docker stop shopsmart || true
           sudo docker rm shopsmart || true
           sudo docker build -t shopsmart .
-          sudo docker run -d -p 3000:3000 shopsmart shopsmart
+          sudo docker run -d -p 3000:3000 shopsmart
