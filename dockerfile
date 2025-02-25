@@ -1,35 +1,19 @@
-# use node as the base image
-FROM node:20-alpine AS builder
-
-# set the working directory
-WORKDIR /app
-
-# Copy package.json and package-lock.json before installing dependencies
-COPY package.json package-lock.json ./
-
-# Install dependencies
-RUN npm install ci
-
-# Copy the rest of the application
-COPY . .
-
-# Compile TypeScript to JavaScript
-RUN npm run build
-
-# production stage
 FROM node:20-alpine
 
-WORKDIR /app
+# Setworking directory
+WORKDIR /usr/src/app
 
-# copy the built aoo from the builder stage
-COPY --from=builder /app/dist /app/dist
-COPY package*.json ./
+# Copy the application code to the container
+COPY . .
 
-# install only production dependencies
-RUN npm install --only=production
+# Install the app dependencies
+RUN npm install
 
-# Expose the port your Express app runs on
+# Compile TypeScript files to JavaScript
+RUN npm run build
+
+# Expose the port the app runs on
 EXPOSE 3000
 
-# Start the application using the compiled JavaScript files
+# Command to run the app
 CMD ["node", "dist/server.js"]

@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { PurchaseItem, CardDetails } from '../../types/models.types';
 import { Product, Purchase, User, Cart, CartITem } from '../models';
-import { makePurchase } from '../../mpesa/makePurchase';
 import { color } from "console-log-colors";
 import { getAwsSecrets } from '../../config/secrets';
 
@@ -131,7 +130,6 @@ export const checkoutCart = async (userId: string, cardDetails: CardDetails) => 
         }
 
         console.log(color.magenta.bold('Making purchase'));
-        const makePurchaseResponse = await makePurchase(userId, purchaseRecord.id);
 
         await clearUserCart(userId);
 
