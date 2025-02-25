@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest --watchAll",
-    "build": "ts-node-dev --poll ./src/server.ts",
+    "build": "tsc",
     "start": "node dist/server.js",
     "dev": "nodemon ./src/server.ts"
   },
