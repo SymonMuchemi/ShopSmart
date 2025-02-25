@@ -1,5 +1,5 @@
 # use node as the base image
-FROM node:18-alpine
+FROM node:20-alpine AS builder
 
 # set the working directory
 WORKDIR /app
@@ -8,10 +8,25 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 
 # Install dependencies
-RUN npm install
+RUN npm install ci
+
+# Copy the rest of the application
+COPY . .
 
 # Compile TypeScript to JavaScript
 RUN npm run build
+
+# production stage
+FROM node:20-alpine
+
+WORKDIR /app
+
+# copy the built aoo from the builder stage
+COPY --from=builder /app/dist /app/dist
+COPY package*.json ./
+
+# install only production dependencies
+RUN npm install --only=production
 
 # Expose the port your Express app runs on
 EXPOSE 3000
