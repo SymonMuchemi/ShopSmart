@@ -16,6 +16,7 @@ const PORT: number = 3000;
 
 connectDB();
 
+// middlwares
 app.use(morgan('dev'));
 app.use(express.json({ limit: "1mb" }));
 app.use(express.urlencoded({ limit: "500kb", extended: true }));
