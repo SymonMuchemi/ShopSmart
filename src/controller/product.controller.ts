@@ -56,4 +56,12 @@ export const create = asyncHandler(async (req: Request, res: Response, next: Nex
         message: 'Product created successfully',
         data: newProduct
     })
+});
+
+export const getProducts = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    if (!res.locals.advancedResults) {
+        return next(new ErrorResponse('Error fetching products!!', 500));
+    }
+
+    res.status(200).json(res.locals.advancedResults);
 })
