@@ -69,7 +69,19 @@ export const getProducts = asyncHandler(async (req: Request, res: Response, next
 
 // TODO: Handle image addition and deletions
 export const updateProduct = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    let product = await Product.findById(req.params.id);
 
+    if (!product) return next(new ErrorResponse(`Could not find product with id: ${req.params.id}`, 400));
+
+    product = await Product.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+        runValidators: true
+    });
+
+    res.status(200).json({
+        success: true,
+        data: product
+    })
 });
 
 export const deleteProduct = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
