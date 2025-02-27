@@ -14,7 +14,7 @@ const upload = multer({
 const productsRouter = Router();
 
 productsRouter.route('/')
-    .post(upload.array('files'), createProductSchema, create);
+.post(upload.array('files'), createProductSchema, create);
 
 // productsRouter.route('/:id')
 //     .delete(asyncHandler(deleteById));
