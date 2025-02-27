@@ -1,7 +1,8 @@
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { initS3Client } from "./client";
 import { GetObjectCommand, PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
-import { color } from "console-log-colors";
+
+const FOLDER_NAME: string = 'images';
 
 export const uploadImageToS3 = async (fileBuffer: Buffer, fileName: string, mimeType: string): Promise<void> => {
     const { s3Client, bucketName } = await initS3Client();
@@ -9,7 +10,7 @@ export const uploadImageToS3 = async (fileBuffer: Buffer, fileName: string, mime
     const uploadParams = {
         Bucket: bucketName,
         Body: fileBuffer,
-        Key: fileName,
+        Key: `${FOLDER_NAME}/${fileName}`,
         ContentType: mimeType
     }
 
@@ -22,7 +23,7 @@ export const getObjectSignedUrl = async (key: string) => {
 
         const params = {
             Bucket: bucketName,
-            Key: key,
+            Key: `${FOLDER_NAME}/${key}`,
             ResponseContentDisposition: "inline"
         }
 
@@ -41,7 +42,7 @@ export const deleteImageFromBucket = async (imageName: string) => {
 
         const params = {
             Bucket: bucketName,
-            Key: imageName
+            Key: `${FOLDER_NAME}/${imageName}`
         }
 
         await s3Client.send(new DeleteObjectCommand(params));
