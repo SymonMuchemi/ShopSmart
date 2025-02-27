@@ -23,7 +23,7 @@ export const fileErrorHandler: ErrorRequestHandler = (err, _req, res, next) => {
             return;
         }
     }
-    next(new ErrorResponse(`File handling error: ${err.name}`, 400));
+    next(new ErrorResponse(`File handling error: ${err.message}`, 400));
 };
 
 export const errorHandler = (err: Error, req: Request, res: Response, next: NextFunction) => {
