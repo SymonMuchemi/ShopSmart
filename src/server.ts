@@ -3,6 +3,7 @@ import express, { Application, Request, Response } from 'express';
 import morgan from 'morgan';
 import { connectDB } from './db/conn';
 import { color } from 'console-log-colors';
+import logger from './logger/logging';
 
 // Import routers
 import authRouter from './routes/auth.routes';
@@ -43,6 +44,7 @@ const server = app.listen(PORT, () => {
 });
 
 process.on('unhandledRejection', (err: any, promise) => {
+    logger.error(`Unhandled exception: ${err.message}`);
     console.log(`Error: ${err.message}`);
 
     server.close(() => process.exit(1));
