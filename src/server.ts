@@ -11,6 +11,9 @@ import cartRouter from './routes/cart.routes';
 import purchaseRouter from './routes/purchase.routes';
 import paymentRouter from './routes/payments.routes';
 
+// import error handler middleware
+import { errorHandler } from './middleware/errrors';
+
 const app: Application = express();
 const PORT: number = 3000;
 
@@ -32,6 +35,8 @@ app.use('/api/v1/', paymentRouter);
 app.get('/api/v1/hello-world', (req: Request, res: Response) => {
     res.send("Hello from smartshop");
 });
+
+app.use(errorHandler);
 
 const server = app.listen(PORT, () => {
     console.log(color.yellowBright.underline(`app is running on http://localhost:${PORT}`));
