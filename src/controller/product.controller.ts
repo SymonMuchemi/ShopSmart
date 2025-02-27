@@ -24,9 +24,10 @@ export const create = asyncHandler(async (req: Request, res: Response, next: Nex
         return next(new ErrorResponse('Please attach image files', 400));
     }
 
-    let files: Express.Multer.File[] = req.files as Express.Multer.File[] || [];
+    const files: Express.Multer.File[] = req.files as Express.Multer.File[] || [];
     const fileNames: string[] = [];
 
+    // TODO: CHECK IF THIS IS NECESSARY
     if (files.length === 0) {
         console.log(color.red.bold('Files array is empty!'));
         return next(new ErrorResponse('Files must not be empty!', 400));
@@ -91,6 +92,43 @@ export const updateProduct = asyncHandler(async (req: Request, res: Response, ne
         data: product
     })
 });
+
+// @desc    updates a product
+// @route   PUT /api/v1/products/:id/photos
+// @access  Private
+export const addProductPhoto = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    let product = await Product.findById(req.params.id);
+
+    if (!product) return next(new ErrorResponse(`Could not find product with id: ${req.params.id}`, 400));
+
+    if (!req.files) return next(new ErrorResponse('Please attach image files', 400));
+
+    const files: Express.Multer.File[] = req.files as Express.Multer.File[] || [];
+
+    const fileNames: string[] = [];
+
+    const totalSize = files.reduce((acc, file) => acc + file.size, 0);
+    console.log(`Total size of files: ${totalSize} bytes`);
+
+    if (totalSize >= 5 * 1024 * 1024) return next(new ErrorResponse('Req files are too large!!', 400));
+
+    for (const file of files) {
+        const filename = 'photo_' + generateFileName();
+
+        await uploadImageToS3(file.buffer, filename, file.mimetype)
+
+        fileNames.push(filename)
+    }
+
+    product.imageNames = [...product.imageNames, ...fileNames] as [string];
+
+    product = await product.save();
+
+    res.status(200).json({
+        success: true,
+        data: product
+    })
+})
 
 // @desc    deletes a product
 // @route   DELETE /api/v1/products/:id

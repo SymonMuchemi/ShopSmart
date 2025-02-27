@@ -43,7 +43,6 @@ const ProductSchema: Schema = new Schema({
 
 ProductSchema.pre<IProduct>('save', function (next) {
     try {
-        // TODO: Store images before saving and store
         // convert strings to lower case
         this.name = this.name.toLowerCase();
         this.category = this.category.toLowerCase(); 

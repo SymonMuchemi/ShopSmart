@@ -4,7 +4,7 @@ import { Product } from '../db/models';
 import advancedResults from '../middleware/advancedResults';
 import { fileErrorHandler } from '../middleware/errrors';
 import { createProductSchema } from "../middleware/validators/product.validator";
-import { create, deleteProduct, getProducts, updateProduct } from "../controller/product.controller";
+import { addProductPhoto, create, deleteProduct, getProducts, updateProduct } from "../controller/product.controller";
 
 const storage = multer.memoryStorage()
 const upload = multer({
@@ -22,6 +22,9 @@ productsRouter.route('/')
 productsRouter.route('/:id')
     .put(updateProduct)
     .delete(deleteProduct);
+
+productsRouter.route('/:id/photos')
+    .put(upload.array('files'), addProductPhoto);
 
 productsRouter.use(fileErrorHandler);
 export default productsRouter;
