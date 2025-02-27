@@ -4,7 +4,7 @@ import { Product } from '../db/models';
 import advancedResults from '../middleware/advancedResults';
 import { fileErrorHandler } from '../middleware/errrors';
 import { createProductSchema } from "../middleware/validators/product.validator";
-import { create, getProducts } from "../controller/product.controller";
+import { create, deleteProduct, getProducts, updateProduct } from "../controller/product.controller";
 
 const storage = multer.memoryStorage()
 const upload = multer({
@@ -16,11 +16,12 @@ const upload = multer({
 const productsRouter = Router();
 
 productsRouter.route('/')
-    .get(advancedResults(Product), getProducts)
-    .post(upload.array('files'), createProductSchema, create);
+    .post(upload.array('files'), createProductSchema, create)
+    .get(advancedResults(Product), getProducts);
 
-// productsRouter.route('/:id')
-//     .delete(asyncHandler(deleteById));
+productsRouter.route('/:id')
+    .put(updateProduct)
+    .delete(deleteProduct);
 
 productsRouter.use(fileErrorHandler);
 export default productsRouter;

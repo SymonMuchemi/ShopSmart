@@ -3,6 +3,7 @@ import { asyncHandler, generateFileName, ErrorResponse } from "../utils";
 import { Product } from "../db/models";
 import { uploadImageToS3 } from "../s3";
 import { color } from "console-log-colors";
+import { deleteImageFromBucket } from "../s3/utils";
 
 
 const PRODUCT_CREATION_ERROR_MSG = "product.controller: Product already exists";
@@ -64,4 +65,32 @@ export const getProducts = asyncHandler(async (req: Request, res: Response, next
     }
 
     res.status(200).json(res.locals.advancedResults);
+});
+
+// TODO: Handle image addition and deletions
+export const updateProduct = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+
+});
+
+export const deleteProduct = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    const product = await Product.findById(req.params.id);
+
+    if (!product) {
+        return next(new ErrorResponse(`Could not find product with id: ${req.params.id}`, 400));
+    }
+
+    console.log(`Deleting: ${product.name}`);
+    if (product.imageNames.length > 0) {
+        for (const image of product.imageNames) {
+            console.log(color.blue.bold(`Deleting: ${image}`));
+            await deleteImageFromBucket(image);
+        }
+    }
+
+    const deletionStatus = await product.deleteOne();
+
+    res.status(200).json({
+        success: true,
+        data: deletionStatus
+    })
 })
