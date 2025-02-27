@@ -1,63 +1,56 @@
-import { Request, Response } from "express";
-import { handleRequest } from "../utils";
-import {
-    fetchProductByNameOrId,
-    fetchProducts,
-    create as createProduct,
-    updateProductByName,
-    deleteProduct,
-    deletesProductsWithEmptyImageArrays
-} from "../services/product.service";
+import { Request, Response, NextFunction } from "express";
+import { asyncHandler, generateFileName } from "../utils";
+import { Product } from "../db/models";
+import { uploadImageToS3 } from "../s3";
 
-const PRODUCT_CREATION_ERROR_MSG = "product.controller: Error creating product";
+
+const PRODUCT_CREATION_ERROR_MSG = "product.controller: Product already exists";
 const PRODUCT_FETCH_ERROR_MSG = "product.controller: Error fetching products";
 const PRODUCT_UPDATE_ERROR_MSG = "product.controller: Error updating product";
 const PRODUCT_DELETION_ERROR_MSG = "product.controller: Error deleting product";
 
-export const create = async (req: Request, res: Response) => {
-    const product = req.body;
-    const files = req.files as Express.Multer.File[] || [];
-    await handleRequest(req, res, () => createProduct(product, files), PRODUCT_CREATION_ERROR_MSG);
-}
-export const findAll = async (req: Request, res: Response) => {
-    const page = Number.parseInt(req.query.page as string) || 1;
-    const limit = Number.parseInt(req.query.limit as string) || 10;
+export const create = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    const { name, description, quantity, category, } = req.body;
 
-    let productName = req.query.name as string;
-    let category = req.query.category as string;
-    let id = req.query.id as string;
+    const existingProduct = await Product.findOne({ name: name.toLowerCase() });
 
-    if (id !== undefined) {
-        await handleRequest(req, res, () => fetchProductByNameOrId(productName, id = id), PRODUCT_FETCH_ERROR_MSG);
-    } else if (productName !== undefined) {
-        await handleRequest(req, res, () => fetchProductByNameOrId(productName = productName), PRODUCT_FETCH_ERROR_MSG);
-    } else if (category !== undefined) {
-        await handleRequest(req, res, () => fetchProducts(page, limit, category = category), PRODUCT_FETCH_ERROR_MSG)
+    if (existingProduct) {
+        return next(new ErrorResponse(PRODUCT_CREATION_ERROR_MSG, 409))
+    }
+
+    if (!req.files) {
+        return next(new ErrorResponse('Please attach image files', 400));
+    }
+
+    let files: Express.Multer.File[] = [];
+    const fileNames: string[] = [];
+
+    if (Array.isArray(req.files)) {
+        files = req.files;
     } else {
-        await handleRequest(req, res, () => fetchProducts(), PRODUCT_FETCH_ERROR_MSG)
+        for (const key in req.files) {
+            if (req.files.hasOwnProperty(key)) {
+                files = files.concat(req.files[key]);
+            }
+        }
     }
-}
 
-export const updateByName = async (req: Request, res: Response) => {
-    let name = req.query.name as string;
-    let id = req.query.id as string;
+    for (const file of files) {
+        const filename = 'photo_' + generateFileName();
 
-    const updateData = req.body;
+        await uploadImageToS3(file.buffer, filename, file.mimetype)
 
-    if (name) {
-        name = name.toLowerCase();
-        await handleRequest(req, res, () => updateProductByName(name, updateData), PRODUCT_UPDATE_ERROR_MSG)
-    } else if (id) {
-        await handleRequest(req, res, () => updateProductByName(id, updateData), PRODUCT_UPDATE_ERROR_MSG)
+        fileNames.push(filename)
     }
-}
 
-export const deleteById = async (req: Request, res: Response) => {
-    const id = req.params.id as string;
+    const newProduct = await Product.create({
+        name, description, imageNames: fileNames,
+        category
+    });
 
-    await handleRequest(req, res, () => deleteProduct(id), PRODUCT_DELETION_ERROR_MSG)
-}
-
-export const deleteImageLess = async (req: Request, res: Response) => {
-    await handleRequest(req, res, deletesProductsWithEmptyImageArrays, PRODUCT_DELETION_ERROR_MSG);
-}
+    res.status(201).json({
+        success: true,
+        message: 'Product created successfully',
+        data: newProduct
+    })
+})

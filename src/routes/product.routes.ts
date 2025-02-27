@@ -1,8 +1,8 @@
 import multer from 'multer';
 import { Router } from "express";
-import { asyncHandler, errorHandler } from "../utils";
+import { fileErrorHandler } from '../middleware/errrors';
 import { createProductSchema } from "../middleware/validators/product.validator";
-import { create, findAll, updateByName, deleteById, deleteImageLess } from "../controller/product.controller";
+import { create } from "../controller/product.controller";
 
 const storage = multer.memoryStorage()
 const upload = multer({
@@ -14,13 +14,10 @@ const upload = multer({
 const productsRouter = Router();
 
 productsRouter.route('/')
-    .get(asyncHandler(findAll))
-    .put(asyncHandler(updateByName))
-    .delete(asyncHandler(deleteImageLess));
-productsRouter.route('/new')
-    .post(upload.array('files'), createProductSchema, asyncHandler(create));
-productsRouter.route('/:id')
-    .delete(asyncHandler(deleteById));
+    .post(upload.array('files'), createProductSchema, create);
 
-productsRouter.use(errorHandler);
+// productsRouter.route('/:id')
+//     .delete(asyncHandler(deleteById));
+
+productsRouter.use(fileErrorHandler);
 export default productsRouter;

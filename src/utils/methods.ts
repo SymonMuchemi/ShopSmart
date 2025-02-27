@@ -1,9 +1,7 @@
-import multer from 'multer';
 import { Request, Response, NextFunction } from "express";
 import { validationResult } from "express-validator";
 import { IProduct, ReturnResponse } from "../types";
 import { getObjectSignedUrl } from "../s3";
-import type { ErrorRequestHandler } from 'express';
 import { deleteImageFromBucket } from '../s3/utils';
 
 export const asyncHandler =
@@ -65,17 +63,3 @@ export const deleteProductImages = async (product: IProduct) => {
         throw new Error(`Error deleting images: ${error.toString()}`);
     }
 }
-
-export const errorHandler: ErrorRequestHandler = (err, _req, res, next) => {
-    if (err instanceof multer.MulterError) {
-        if (err.code === 'LIMIT_FILE_SIZE') {
-            res.status(413).json({
-                code: 413,
-                message: 'File size too large! Maximum allowed size: 5MB.',
-            });
-
-            return;
-        }
-    }
-    next(err);
-};
