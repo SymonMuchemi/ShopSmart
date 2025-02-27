@@ -7,10 +7,10 @@ import { deleteImageFromBucket } from "../s3/utils";
 
 
 const PRODUCT_CREATION_ERROR_MSG = "product.controller: Product already exists";
-const PRODUCT_FETCH_ERROR_MSG = "product.controller: Error fetching products";
-const PRODUCT_UPDATE_ERROR_MSG = "product.controller: Error updating product";
-const PRODUCT_DELETION_ERROR_MSG = "product.controller: Error deleting product";
 
+// @desc    creates a product
+// @route   POST /api/v1/products
+// @access  Private
 export const create = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     const { name, description, quantity, category, price } = req.body;
 
@@ -59,6 +59,10 @@ export const create = asyncHandler(async (req: Request, res: Response, next: Nex
     })
 });
 
+
+// @desc    fetches all products
+// @route   PUT /api/v1/products
+// @access  Public
 export const getProducts = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     if (!res.locals.advancedResults) {
         return next(new ErrorResponse('Error fetching products!!', 500));
@@ -68,6 +72,10 @@ export const getProducts = asyncHandler(async (req: Request, res: Response, next
 });
 
 // TODO: Handle image addition and deletions
+
+// @desc    updates a product
+// @route   PUT /api/v1/products/:id
+// @access  Private
 export const updateProduct = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     let product = await Product.findById(req.params.id);
 
@@ -84,6 +92,9 @@ export const updateProduct = asyncHandler(async (req: Request, res: Response, ne
     })
 });
 
+// @desc    deletes a product
+// @route   DELETE /api/v1/products/:id
+// @access  Private
 export const deleteProduct = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     const product = await Product.findById(req.params.id);
 
