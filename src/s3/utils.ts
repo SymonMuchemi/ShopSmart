@@ -1,6 +1,7 @@
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { initS3Client } from "./client";
-import { GetObjectCommand, PutObjectCommand, DeleteObjectCommand, BucketAccelerateStatus } from "@aws-sdk/client-s3";
+import { GetObjectCommand, PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
+import { color } from "console-log-colors";
 
 export const uploadImageToS3 = async (fileBuffer: Buffer, fileName: string, mimeType: string): Promise<void> => {
     const { s3Client, bucketName } = await initS3Client();

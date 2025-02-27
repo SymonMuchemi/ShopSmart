@@ -93,7 +93,7 @@ export const updateProduct = asyncHandler(async (req: Request, res: Response, ne
     })
 });
 
-// @desc    updates a product
+// @desc    adds photos to a product
 // @route   PUT /api/v1/products/:id/photos
 // @access  Private
 export const addProductPhoto = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
@@ -136,9 +136,7 @@ export const addProductPhoto = asyncHandler(async (req: Request, res: Response, 
 export const deleteProduct = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     const product = await Product.findById(req.params.id);
 
-    if (!product) {
-        return next(new ErrorResponse(`Could not find product with id: ${req.params.id}`, 400));
-    }
+    if (!product) return next(new ErrorResponse(`Could not find product with id: ${req.params.id}`, 400));
 
     console.log(`Deleting: ${product.name}`);
     if (product.imageNames.length > 0) {
@@ -154,4 +152,28 @@ export const deleteProduct = asyncHandler(async (req: Request, res: Response, ne
         success: true,
         data: deletionStatus
     })
+})
+
+// @desc    deletes a product's phot
+// @route   DELETE /api/v1/products/:id/photos/:photo_name
+// @access  Private
+export const deleteProductPhoto = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    let product = await Product.findById(req.params.id);
+
+    if (!product) return next(new ErrorResponse(`Could not find product with id: ${req.params.id}`, 400));
+
+    // check photo in product.imageName
+    if (!product.imageNames.includes(req.params.photo_name)) return next("Photo not found!");
+
+    await deleteImageFromBucket(req.params.photo_name);
+
+    product.imageNames = product.imageNames.filter(photo => photo !== req.params.photo_name) as [string];
+
+    product = await product.save();
+
+    res.status(200).json({
+        success: true,
+        data: product
+    })
+
 })
