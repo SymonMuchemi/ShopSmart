@@ -1,7 +1,7 @@
 import crypto from 'crypto';
 import sharp from 'sharp';
 
-export const generateFileName = (bytes = 32) => {
+export const generateFileName = (bytes = 16) => {
     return crypto.randomBytes(bytes).toString('hex');
 }
 
