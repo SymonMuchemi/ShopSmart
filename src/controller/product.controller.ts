@@ -11,7 +11,7 @@ const PRODUCT_CREATION_ERROR_MSG = "product.controller: Product already exists";
 // @desc    creates a product
 // @route   POST /api/v1/products
 // @access  Private
-export const create = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+export const createProduct = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     const { name, description, quantity, category, price } = req.body;
 
     const existingProduct = await Product.findOne({ name: name.toLowerCase() });
