@@ -27,7 +27,7 @@ connectDB();
 if (NODE_ENV === 'development') {
     app.use(morgan('dev'));
 } else {
-    cron.schedule('*/1 * * * *', () => {
+    cron.schedule('0 0 * * *', () => {
         uploadLogsToS3();
         console.log(color.cyan.inverse('Logs uploaded to S3'));
     });
