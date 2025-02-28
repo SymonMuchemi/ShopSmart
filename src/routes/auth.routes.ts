@@ -5,7 +5,7 @@ import { createUserSchema, validateUserSchema } from "../middleware/validators/u
 
 const authRouter = Router();
 
-authRouter.post('/register', createUserSchema, asyncHandler(register));
-authRouter.post('/login', validateUserSchema, asyncHandler(login));
+authRouter.post('/register', createUserSchema, register);
+authRouter.post('/login', validateUserSchema, login);
 
 export default authRouter;

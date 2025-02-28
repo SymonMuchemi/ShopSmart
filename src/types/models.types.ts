@@ -4,8 +4,13 @@ export interface IUser extends Document {
     username: string;
     password: string;
     email: string;
-    role: string | 'user' | 'admin';
+    role?: string | 'user' | 'admin';
     phone: number;
+    resetPasswordToken?: string;
+    resetPasswordExpire?: Date;
+    getSignedJwtToken(): Promise<string>;
+    matchPassword(password: string): Promise<boolean>;
+    getPasswordResetToken(): string;
 }
 
 export interface IProduct extends Document {
