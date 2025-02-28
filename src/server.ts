@@ -1,9 +1,11 @@
 import cookieParser from 'cookie-parser';
 import express, { Application, Request, Response } from 'express';
 import morgan from 'morgan';
-import { connectDB } from './db/conn';
 import { color } from 'console-log-colors';
+import cron from 'node-cron';
 import logger from './logger/logging';
+import { connectDB } from './db/conn';
+import { uploadLogsToS3 } from './logger/s3logger';
 
 // Import routers
 import authRouter from './routes/auth.routes';
@@ -17,11 +19,19 @@ import { errorHandler } from './middleware/errrors';
 
 const app: Application = express();
 const PORT: number = 3000;
+const NODE_ENV: string = process.env.ENVIROMENT || 'development';
 
 connectDB();
 
 // middlwares
-app.use(morgan('dev'));
+if (NODE_ENV === 'development') {
+    app.use(morgan('dev'));
+} else {
+    cron.schedule('*/1 * * * *', () => {
+        uploadLogsToS3();
+        console.log(color.cyan.inverse('Logs uploaded to S3'));
+    });
+}
 app.use(express.json({ limit: "1mb" }));
 app.use(express.urlencoded({ limit: "500kb", extended: true }));
 app.use(cookieParser(process.env.JWT_SECRET));
