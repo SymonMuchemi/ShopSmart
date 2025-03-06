@@ -2,6 +2,7 @@ import type { ErrorRequestHandler, NextFunction, Request, Response } from 'expre
 import { ErrorResponse } from '../utils';
 import multer from 'multer';
 import logger from '../logger/logging';
+import { color } from 'console-log-colors';
 
 interface Error {
   statusCode?: number;
@@ -42,6 +43,7 @@ export const errorHandler = (err: Error, req: Request, res: Response, next: Next
   // Mongo Duplicate Error
   if (err.code === 11000) {
     const message = 'Duplicate field value entered!';
+    console.log(color.red.bold(`Req.body: ${JSON.stringify(req.body)}`));
     error = new ErrorResponse(message, 400);
     logger.error(message);
   }

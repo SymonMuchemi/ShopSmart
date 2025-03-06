@@ -15,7 +15,7 @@ import purchaseRouter from './routes/purchase.routes';
 import paymentRouter from './routes/payments.routes';
 
 // import error handler middleware
-import { errorHandler } from './middleware/errrors';
+import { errorHandler } from './middleware/errors';
 
 const app: Application = express();
 const PORT: number = 3000;
