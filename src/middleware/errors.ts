@@ -25,8 +25,9 @@ export const fileErrorHandler: ErrorRequestHandler = (err, _req, res, next) => {
       return;
     }
   }
-  logger.error(`File handling error: ${err.message}`);
-  next(new ErrorResponse(`File handling error: ${err.message}`, 400));
+  logger.error(`File handling error: ${err.message}: ${err.code}`);
+  console.log(`Req: ${_req.statusCode}`);
+  next(new ErrorResponse(`${err.message}`, err.code));
 };
 
 export const errorHandler = (err: Error, req: Request, res: Response, next: NextFunction) => {
