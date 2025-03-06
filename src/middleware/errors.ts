@@ -44,6 +44,7 @@ export const errorHandler = (err: Error, req: Request, res: Response, next: Next
   if (err.code === 11000) {
     const message = 'Duplicate field value entered!';
     console.log(color.red.bold(`Req.body: ${JSON.stringify(req.body)}`));
+    console.log(color.cyan.bold(`Complete Error mesage: ${err.message}`))
     error = new ErrorResponse(message, 400);
     logger.error(message);
   }

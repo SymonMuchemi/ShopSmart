@@ -1,12 +1,9 @@
 import { NextFunction, Request, Response } from "express";
-import { asyncHandler, ErrorResponse, handleRequest } from "../utils";
+import { asyncHandler, ErrorResponse } from "../utils";
 import { User } from "../db/models";
 import { IUser } from "../types";
 import { getAwsSecrets } from "../config/secrets";
-
-interface ExtendedRequest extends Request {
-    user?: any;
-}
+import { ExtendedRequest } from "../types/response.type";
 
 // @desc    register a new user
 // @route   POST /api/v1/auth/register
@@ -23,7 +20,7 @@ export const register = asyncHandler(async (req: Request, res: Response, next: N
     await sendTokenResponse(user, 201, res);
 });
 
-// @desc    register a new user
+// @desc    login a new user
 // @route   POST /api/v1/auth/login
 // @access  Public
 export const login = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
@@ -47,7 +44,9 @@ export const login = asyncHandler(async (req: Request, res: Response, next: Next
 // @route   GET /api/v1/auth/me
 // @access  Public
 export const getMe = asyncHandler(async (req: ExtendedRequest, res: Response, next: NextFunction) => {
-    const user = await User.findById(req.user.id);
+    const user = req.user;
+
+    if (!user) return next(new ErrorResponse("No user found!", 400));
 
     res.status(200).json({
         success: true,
@@ -62,8 +61,6 @@ export const forgotpassword = asyncHandler(async (req: Request, res: Response, n
     const user = await User.findOne({ email: req.body.email });
 
     if (!user) return next(new ErrorResponse(`No user found with email: ${req.body.email}`, 400));
-
-    const resetToken = user.getPasswordResetToken();
 
     await user.save({ validateBeforeSave: false });
 

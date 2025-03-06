@@ -1,7 +1,12 @@
+import { Request } from 'express';
 export interface ReturnResponse {
     code: number;
     message: string;
     details: any;
+}
+
+export interface ExtendedRequest extends Request {
+  user?: any;
 }
 
 export interface AdvancedResultsResponse<T> {
