@@ -21,14 +21,14 @@ productsRouter.route('/')
     .get(advancedResults(Product), getProducts);
 
 productsRouter.route('/:id')
-    .put(updateProduct)
+    .put(protect, authorize('admin'), updateProduct)
     .delete(deleteProduct);
 
 productsRouter.route('/:id/photos')
-    .put(upload.array('files'), addProductPhoto);
+    .put(upload.array('files'), protect, authorize('admin'), addProductPhoto);
 
 productsRouter.route('/:id/photos/:photo_name')
-    .put(deleteProductPhoto);
+    .put(protect, authorize('admin'), deleteProductPhoto);
 
 productsRouter.use(fileErrorHandler);
 export default productsRouter;
