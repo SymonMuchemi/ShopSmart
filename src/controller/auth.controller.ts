@@ -4,6 +4,7 @@ import { User } from "../db/models";
 import { IUser } from "../types";
 import { getAwsSecrets } from "../config/secrets";
 import { ExtendedRequest } from "../types/response.type";
+import client from "../redis/redisClient";
 
 // @desc    register a new user
 // @route   POST /api/v1/auth/register
