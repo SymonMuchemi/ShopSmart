@@ -4,7 +4,7 @@ import { User } from "../db/models";
 import { IUser } from "../types";
 import { getAwsSecrets } from "../config/secrets";
 import { ExtendedRequest } from "../types/response.type";
-import client from "../redis/redisClient";
+import redisClient from "../redis/redisClient";
 
 // @desc    register a new user
 // @route   POST /api/v1/auth/register
@@ -17,6 +17,10 @@ export const register = asyncHandler(async (req: Request, res: Response, next: N
     });
 
     if (!user) return next(new ErrorResponse('Could not create new user', 500));
+
+    const message = `Dear ${name},\nThank you for creating a shopsmart account. This is just a test email.`
+
+    await redisClient.writeMailStream(email, 'Welcome to Shopsmart', message);
 
     await sendTokenResponse(user, 201, res);
 });
@@ -37,6 +41,10 @@ export const login = asyncHandler(async (req: Request, res: Response, next: Next
     const isMatch = user.matchPassword(password);
 
     if (!isMatch) return next(new ErrorResponse('Invalid credentials', 401));
+
+    const message = `Dear ${user.name},\nYou have successfully logged in to your shopsmart account. This is just a test email.`
+
+    await redisClient.writeMailStream(email, 'Welcome back to Shopsmart', message);
 
     await sendTokenResponse(user, 200, res);
 });
@@ -73,6 +81,8 @@ export const forgotpassword = asyncHandler(async (req: Request, res: Response, n
 
 const sendTokenResponse = async (user: IUser, statusCode: number, res: Response) => {
     const { JWT_EXPIRATION } = await getAwsSecrets();
+    if (!JWT_EXPIRATION) console.error('JWT EXP UNDEFINED');
+
     const token = await user.getSignedJwtToken();
 
     if (!token) throw new ErrorResponse('Could not create token', 500);
