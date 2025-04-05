@@ -1,11 +1,14 @@
 import cookieParser from 'cookie-parser';
-import express, { Application, Request, Response } from 'express';
-import morgan from 'morgan';
-import { color } from 'console-log-colors';
 import cron from 'node-cron';
 import logger from './logger/logging';
+import morgan from 'morgan';
+import { config } from 'dotenv';
+import { color } from 'console-log-colors';
 import { connectDB } from './db/conn';
 import { uploadLogsToS3 } from './logger/s3logger';
+import express, { Application, Request, Response } from 'express';
+
+config();
 
 // Import routers
 import authRouter from './routes/auth.routes';
@@ -18,8 +21,8 @@ import paymentRouter from './routes/payments.routes';
 import { errorHandler } from './middleware/errors';
 
 const app: Application = express();
-const PORT: number = 3000;
-const NODE_ENV: string = process.env.ENVIROMENT || 'development';
+const PORT: number | string = process.env.PORT || 3001;
+const NODE_ENV: string = process.env.NODE_ENV || 'development';
 
 connectDB();
 

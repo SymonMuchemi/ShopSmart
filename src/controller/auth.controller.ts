@@ -17,7 +17,7 @@ export const register = asyncHandler(async (req: Request, res: Response, next: N
 
     if (!user) return next(new ErrorResponse('Could not create new user', 500));
 
-    await sendTokenResponse(user, 201, res);
+    await sendTokenResponse(user, 201, res, next);
 });
 
 // @desc    login a new user
@@ -37,7 +37,7 @@ export const login = asyncHandler(async (req: Request, res: Response, next: Next
 
     if (!isMatch) return next(new ErrorResponse('Invalid credentials', 401));
 
-    await sendTokenResponse(user, 200, res);
+    await sendTokenResponse(user, 200, res, next);
 });
 
 // @desc    get currect logged in user
@@ -70,15 +70,19 @@ export const forgotpassword = asyncHandler(async (req: Request, res: Response, n
     })
 })
 
-const sendTokenResponse = async (user: IUser, statusCode: number, res: Response) => {
-    const { JWT_EXPIRATION } = await getAwsSecrets();
+const sendTokenResponse = async (user: IUser, statusCode: number, res: Response, next: NextFunction) => {
+    const JWT_EXPIRATION = process.env.JWT_EXPIRATION;
+
+    if (!JWT_EXPIRATION) {
+        return next(new ErrorResponse('JWT expiration not available!!', 500));
+    }
     const token = await user.getSignedJwtToken();
 
     if (!token) throw new ErrorResponse('Could not create token', 500);
 
     const options = {
         expire: new Date(
-            Date.now() + JWT_EXPIRATION * 24 * 60 * 60 * 1000
+            Date.now() + Number(JWT_EXPIRATION) * 24 * 60 * 60 * 1000
         ),
         httpOnly: true,
         secure: false

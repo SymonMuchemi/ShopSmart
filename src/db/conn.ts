@@ -1,24 +1,15 @@
 import mongoose from 'mongoose';
-import { getAwsSecrets } from '../config/secrets';
-import { SecretsManagerClient, GetSecretValueCommand } from '@aws-sdk/client-secrets-manager';
-
 import { color } from 'console-log-colors';
-
-const secret_name = "shopsmart-secret-values";
-
-const client = new SecretsManagerClient({ region: 'eu-north-1' });
-
-let response;
-
 
 export const connectDB = async () => {
     try {
         // fetch MongoDB URI from AWS Secrets Manager
 
-        const { MONGO_DB_URL } = await getAwsSecrets();
+        const MONGO_DB_URL: string | undefined = process.env.MONGO_DB_URL;
 
         if (!MONGO_DB_URL) {
-            console.log(color.red.inverse('MONGO DB URL NOT FOUND IN SECRET!!!'))
+            console.log(color.red.inverse('MONGO DB URL NOT FOUND IN SECRET!!!'));
+            throw new Error('Could not find mongo db access credentials');
         }
 
         const conn = await mongoose.connect(MONGO_DB_URL);
